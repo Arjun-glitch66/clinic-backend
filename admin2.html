@@ -39,40 +39,54 @@
 <h1>📄 Applications Dashboard</h1>
 
 <table id="table">
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Phone</th>
-        <th>Position</th>
-        <th>Experience</th>
-        <th>Action</th>
-    </tr>
+<tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Phone</th>
+    <th>Position</th>
+    <th>Experience</th>
+    <th>Action</th>
+</tr>
 </table>
 
 <script>
-fetch("http://localhost:5000/applications")
-.then(res => res.json())
-.then(data => {
-    let table = document.getElementById("table");
 
-    data.forEach(row => {
-        let tr = document.createElement("tr");
+// 🔐 PASSWORD PROTECTION
+const password = prompt("Enter Admin Password:");
+if(password !== "admin123"){
+    alert("Access Denied");
+    window.location.href = "index.html";
+} else {
+    loadApplications();
+}
 
-        tr.innerHTML = `
-            <td>${row.id}</td>
-            <td>${row.name}</td>
-            <td>${row.email}</td>
-            <td>${row.phone}</td>
-            <td>${row.position}</td>
-            <td>${row.experience}</td>
-            <td><button onclick="deleteRow(${row.id})">❌</button></td>
-        `;
+// 📥 LOAD DATA
+function loadApplications() {
+    fetch("http://localhost:5000/applications")
+    .then(res => res.json())
+    .then(data => {
+        let table = document.getElementById("table");
 
-        table.appendChild(tr);
+        data.forEach(row => {
+            let tr = document.createElement("tr");
+
+            tr.innerHTML = `
+                <td>${row.id}</td>
+                <td>${row.name}</td>
+                <td>${row.email}</td>
+                <td>${row.phone}</td>
+                <td>${row.position}</td>
+                <td>${row.experience}</td>
+                <td><button onclick="deleteRow(${row.id})">❌</button></td>
+            `;
+
+            table.appendChild(tr);
+        });
     });
-});
+}
 
+// ❌ DELETE FUNCTION
 function deleteRow(id) {
     fetch(`http://localhost:5000/delete_application/${id}`, {
         method: "DELETE"
@@ -83,6 +97,7 @@ function deleteRow(id) {
         location.reload();
     });
 }
+
 </script>
 
 </body>

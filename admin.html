@@ -39,7 +39,7 @@
 <h1>📋 Appointments Dashboard</h1>
 
 <table id="table">
-    <tr>
+<tr>
     <th>ID</th>
     <th>Name</th>
     <th>Phone</th>
@@ -52,29 +52,43 @@
 </table>
 
 <script>
-fetch("http://localhost:5000/appointments")
-.then(res => res.json())
-.then(data => {
-    let table = document.getElementById("table");
 
-    data.forEach(row => {
-        let tr = document.createElement("tr");
+// 🔐 PASSWORD PROTECTION
+const password = prompt("Enter Admin Password:");
+if(password !== "admin123"){
+    alert("Access Denied");
+    window.location.href = "index.html";
+} else {
+    loadAppointments();
+}
 
-        tr.innerHTML = `
-            <td>${row.id}</td>
-            <td>${row.name}</td>
-            <td>${row.phone}</td>
-            <td>${row.date}</td>
-            <td>${row.time}</td>
-            <td>${row.service}</td>
-            <td>${row.message}</td>
-            <td><button onclick="deleteRow(${row.id})">❌</button></td>
-        `;
+// 📥 LOAD DATA
+function loadAppointments() {
+    fetch("http://localhost:5000/appointments")
+    .then(res => res.json())
+    .then(data => {
+        let table = document.getElementById("table");
 
-        table.appendChild(tr);
+        data.forEach(row => {
+            let tr = document.createElement("tr");
+
+            tr.innerHTML = `
+                <td>${row.id}</td>
+                <td>${row.name}</td>
+                <td>${row.phone}</td>
+                <td>${row.date}</td>
+                <td>${row.time}</td>
+                <td>${row.service}</td>
+                <td>${row.message}</td>
+                <td><button onclick="deleteRow(${row.id})">❌</button></td>
+            `;
+
+            table.appendChild(tr);
+        });
     });
-});
+}
 
+// ❌ DELETE FUNCTION
 function deleteRow(id) {
     fetch(`http://localhost:5000/delete/${id}`, {
         method: "DELETE"
@@ -85,6 +99,8 @@ function deleteRow(id) {
         location.reload();
     });
 }
+
 </script>
+
 </body>
 </html>

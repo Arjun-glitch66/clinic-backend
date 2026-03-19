@@ -32,11 +32,18 @@
         padding: 5px 10px;
         cursor: pointer;
     }
+    .loading {
+        margin-top: 20px;
+        font-size: 16px;
+        color: #555;
+    }
 </style>
 </head>
 <body>
 
 <h1>📄 Applications Dashboard</h1>
+
+<div id="loading" class="loading">Loading data...</div>
 
 <table id="table">
 <tr>
@@ -52,6 +59,9 @@
 
 <script>
 
+// 🔥 YOUR LIVE BACKEND
+const API_URL = "https://clinic-backend-wg1k.onrender.com";
+
 // 🔐 PASSWORD PROTECTION
 const password = prompt("Enter Admin Password:");
 if(password !== "admin123"){
@@ -63,10 +73,24 @@ if(password !== "admin123"){
 
 // 📥 LOAD DATA
 function loadApplications() {
-    fetch("http://localhost:5000/applications")
+    fetch(`${API_URL}/applications`)
     .then(res => res.json())
     .then(data => {
+        document.getElementById("loading").style.display = "none";
+
         let table = document.getElementById("table");
+
+        // clear table before adding
+        table.innerHTML = `
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Position</th>
+            <th>Experience</th>
+            <th>Action</th>
+        </tr>`;
 
         data.forEach(row => {
             let tr = document.createElement("tr");
@@ -83,18 +107,31 @@ function loadApplications() {
 
             table.appendChild(tr);
         });
+
+        if(data.length === 0){
+            document.getElementById("loading").innerText = "No applications found.";
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        document.getElementById("loading").innerText = "Error loading data ❌";
     });
 }
 
 // ❌ DELETE FUNCTION
 function deleteRow(id) {
-    fetch(`http://localhost:5000/delete_application/${id}`, {
+    if(!confirm("Are you sure you want to delete this application?")) return;
+
+    fetch(`${API_URL}/delete_application/${id}`, {
         method: "DELETE"
     })
     .then(res => res.text())
     .then(msg => {
         alert(msg);
-        location.reload();
+        loadApplications(); // reload without refresh
+    })
+    .catch(err => {
+        alert("Error deleting ❌");
     });
 }
 

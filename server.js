@@ -4,23 +4,36 @@ const cors = require("cors");
 const nodemailer = require("nodemailer");
 
 const app = express();
-app.use(cors());
+
+// ✅ Middleware
+app.use(cors({
+    origin: "*"
+}));
 app.use(express.json());
 
-// ✅ MySQL connection
+// ✅ MySQL Connection (ENV based)
 const db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "Arjun_2006",
-    database: "clinic_db"
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME
 });
 
-// ✅ Email setup (IMPORTANT: put your app password)
+// ✅ Check DB connection
+db.connect((err) => {
+    if (err) {
+        console.log("❌ MySQL Connection Failed:", err);
+    } else {
+        console.log("✅ MySQL Connected");
+    }
+});
+
+// ✅ Email Setup (ENV based)
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-        user: "arjunanand206@gmail.com",
-        pass: "bmua mbzy ukbm ttco"   
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
     }
 });
 
@@ -29,11 +42,17 @@ app.get("/", (req, res) => {
     res.send("Server running ✅");
 });
 
-// ✅ Get all appointments (admin)
+// ✅ Get all appointments
 app.get("/appointments", (req, res) => {
-    db.query("SELECT * FROM appointments ORDER BY date, time", (err, result) => {
-        if (err) res.send("Error");
-        else res.json(result);
+    const sql = "SELECT * FROM appointments ORDER BY date, time";
+
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send("Error fetching appointments");
+        } else {
+            res.json(result);
+        }
     });
 });
 
@@ -41,15 +60,25 @@ app.get("/appointments", (req, res) => {
 app.post("/book", (req, res) => {
     const { name, phone, date, time, service, message } = req.body;
 
-    const sql = "INSERT INTO appointments (name, phone, date, time, service, message) VALUES (?, ?, ?, ?, ?, ?)";
+    if (!name || !phone || !date || !time) {
+        return res.status(400).send("Missing required fields");
+    }
+
+    const sql = `
+        INSERT INTO appointments (name, phone, date, time, service, message) 
+        VALUES (?, ?, ?, ?, ?, ?)
+    `;
 
     db.query(sql, [name, phone, date, time, service, message], (err) => {
-        if (err) return res.send("Database Error");
+        if (err) {
+            console.log(err);
+            return res.status(500).send("Database Error");
+        }
 
         // 📩 Send Email
         const mailOptions = {
-            from: "arjunanand206@gmail.com",
-            to: "arjunanand206@gmail.com",
+            from: process.env.EMAIL_USER,
+            to: process.env.EMAIL_USER,
             subject: "New Appointment",
             text: `New Appointment:
 Name: ${name}
@@ -60,7 +89,13 @@ Service: ${service}
 Message: ${message}`
         };
 
-        transporter.sendMail(mailOptions);
+        transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+                console.log("❌ Email Error:", err);
+            } else {
+                console.log("✅ Email Sent:", info.response);
+            }
+        });
 
         res.send("Appointment Booked & Email Sent ✅");
     });
@@ -70,15 +105,25 @@ Message: ${message}`
 app.post("/apply", (req, res) => {
     const { name, phone, email, position, experience } = req.body;
 
-    const sql = "INSERT INTO applications (name, phone, email, position, experience) VALUES (?, ?, ?, ?, ?)";
+    if (!name || !phone || !email || !position) {
+        return res.status(400).send("Missing required fields");
+    }
+
+    const sql = `
+        INSERT INTO applications (name, phone, email, position, experience) 
+        VALUES (?, ?, ?, ?, ?)
+    `;
 
     db.query(sql, [name, phone, email, position, experience], (err) => {
-        if (err) return res.send("Database Error");
+        if (err) {
+            console.log(err);
+            return res.status(500).send("Database Error");
+        }
 
         // 📩 Send Email
         const mailOptions = {
-            from: "arjunanand206@gmail.com",
-            to: "arjunanand206@gmail.com",
+            from: process.env.EMAIL_USER,
+            to: process.env.EMAIL_USER,
             subject: "New Job Application",
             text: `New Job Application:
 Name: ${name}
@@ -88,34 +133,61 @@ Position: ${position}
 Experience: ${experience}`
         };
 
-        transporter.sendMail(mailOptions);
+        transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+                console.log("❌ Email Error:", err);
+            } else {
+                console.log("✅ Email Sent:", info.response);
+            }
+        });
 
         res.send("Application Submitted & Email Sent ✅");
     });
 });
 
-// ✅ DELETE
+// ✅ DELETE APPOINTMENT
 app.delete("/delete/:id", (req, res) => {
-    db.query("DELETE FROM appointments WHERE id = ?", [req.params.id], () => {
-        res.send("Deleted Successfully");
+    const id = req.params.id;
+
+    db.query("DELETE FROM appointments WHERE id = ?", [id], (err) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send("Delete Error");
+        } else {
+            res.send("Deleted Successfully");
+        }
     });
 });
 
-// ✅ START SERVER
-app.listen(5000, () => {
-    console.log("Server running on port 5000 🚀");
-    console.log("JS LOADED");
-});
-
+// ✅ GET APPLICATIONS
 app.get("/applications", (req, res) => {
     db.query("SELECT * FROM applications", (err, result) => {
-        if (err) res.send("Error");
-        else res.json(result);
+        if (err) {
+            console.log(err);
+            res.status(500).send("Error fetching applications");
+        } else {
+            res.json(result);
+        }
     });
 });
 
+// ✅ DELETE APPLICATION
 app.delete("/delete_application/:id", (req, res) => {
-    db.query("DELETE FROM applications WHERE id = ?", [req.params.id], () => {
-        res.send("Application Deleted Successfully");
+    const id = req.params.id;
+
+    db.query("DELETE FROM applications WHERE id = ?", [id], (err) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send("Delete Error");
+        } else {
+            res.send("Application Deleted Successfully");
+        }
     });
+});
+
+// ✅ START SERVER (IMPORTANT FIX FOR RAILWAY)
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
 });

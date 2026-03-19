@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>The Movement Clinic – Salem</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --green: #1a6b4a;
+    --green-light: #2d8f63;
+    --green-pale: #e8f5ef;
+    --green-mid: #c2e0d1;
+    --cream: #faf8f4;
+    --dark: #111a15;
+    --text: #2a3a30;
+    --muted: #6b7f72;
+    --white: #ffffff;
+    --radius: 14px;
+    --shadow: 0 4px 32px rgba(26,107,74,0.10);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; color: var(--text); background: var(--cream); }
+
+  /* NAV */
+  nav {
+    position: fixed; top:0; left:0; right:0; z-index:100;
+    background: rgba(250,248,244,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--green-mid);
+    padding: 0 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 68px;
+  }
+  .logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .logo-icon {
+    width:38px; height:38px; border-radius:10px;
+    background: var(--green);
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px;
+  }
+  .logo-text { font-family:'Playfair Display',serif; font-size:18px; font-weight:700; color:var(--dark); line-height:1.1; }
+  .logo-sub { font-size:11px; color:var(--muted); font-weight:400; letter-spacing:0.5px; }
+  .nav-links { display:flex; gap:32px; list-style:none; }
+  .nav-links a { text-decoration:none; color:var(--text); font-size:14px; font-weight:500; transition:color 0.2s; }
+  .nav-links a:hover { color:var(--green); }
+  .nav-cta {
+    background:var(--green); color:#fff; border:none; border-radius:8px;
+    padding:10px 22px; font-size:14px; font-weight:600; cursor:pointer;
+    font-family:'DM Sans',sans-serif; transition:background 0.2s;
+    text-decoration:none;
+  }
+  .nav-cta:hover { background:var(--green-light); }
+  .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; }
+  .hamburger span { width:24px; height:2px; background:var(--dark); border-radius:2px; display:block; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    padding: 120px 5% 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    background: linear-gradient(135deg, var(--cream) 60%, var(--green-pale) 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content:'';
+    position:absolute; top:-100px; right:-100px;
+    width:500px; height:500px;
+    background: radial-gradient(circle, rgba(26,107,74,0.08) 0%, transparent 70%);
+    border-radius:50%;
+  }
+  .hero-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--green-pale); border:1px solid var(--green-mid);
+    border-radius:100px; padding:6px 14px;
+    font-size:13px; color:var(--green); font-weight:500;
+    margin-bottom:24px;
+  }
+  .hero-badge span { width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .hero h1 {
+    font-family:'Playfair Display',serif;
+    font-size: clamp(38px, 5vw, 62px);
+    font-weight:700; line-height:1.12;
+    color:var(--dark);
+    margin-bottom:20px;
+  }
+  .hero h1 em { color:var(--green); font-style:normal; }
+  .hero p { font-size:17px; color:var(--muted); line-height:1.75; margin-bottom:36px; max-width:480px; }
+  .hero-actions { display:flex; gap:14px; flex-wrap:wrap; }
+  .btn-primary {
+    background:var(--green); color:#fff; border:none; border-radius:10px;
+    padding:14px 30px; font-size:15px; font-weight:600; cursor:pointer;
+    font-family:'DM Sans',sans-serif; text-decoration:none;
+    transition:background 0.2s, transform 0.1s;
+    display:inline-block;
+  }
+  .btn-primary:hover { background:var(--green-light); transform:translateY(-1px); }
+  .btn-outline {
+    background:transparent; color:var(--green); border:1.5px solid var(--green);
+    border-radius:10px; padding:14px 30px; font-size:15px; font-weight:600;
+    cursor:pointer; font-family:'DM Sans',sans-serif; text-decoration:none;
+    transition:background 0.2s; display:inline-block;
+  }
+  .btn-outline:hover { background:var(--green-pale); }
+  .hero-stats { display:flex; gap:32px; margin-top:44px; }
+  .stat { }
+  .stat-num { font-family:'Playfair Display',serif; font-size:32px; font-weight:700; color:var(--green); }
+  .stat-label { font-size:13px; color:var(--muted); margin-top:2px; }
+  .hero-visual {
+    display:flex; flex-direction:column; gap:16px; position:relative;
+  }
+  .hero-card {
+    background:var(--white); border-radius:var(--radius); padding:24px 28px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--green-mid);
+  }
+  .hero-card-icon { font-size:28px; margin-bottom:12px; }
+  .hero-card h3 { font-size:16px; font-weight:600; color:var(--dark); margin-bottom:6px; }
+  .hero-card p { font-size:14px; color:var(--muted); line-height:1.6; }
+  .hero-card-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+
+  /* SECTIONS */
+  section { padding: 90px 5%; }
+  .section-label {
+    font-size:12px; font-weight:600; letter-spacing:2px; text-transform:uppercase;
+    color:var(--green); margin-bottom:12px;
+  }
+  .section-title {
+    font-family:'Playfair Display',serif;
+    font-size: clamp(28px, 3.5vw, 42px);
+    font-weight:700; color:var(--dark); line-height:1.2; margin-bottom:16px;
+  }
+  .section-sub { font-size:16px; color:var(--muted); line-height:1.75; max-width:560px; }
+  .section-header { margin-bottom:56px; }
+  .section-header.center { text-align:center; }
+  .section-header.center .section-sub { margin:0 auto; }
+
+  /* ABOUT */
+  #about { background:var(--white); }
+  .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+  .about-image {
+    background: linear-gradient(135deg, var(--green-pale), var(--green-mid));
+    border-radius:20px; height:420px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:80px; position:relative; overflow:hidden;
+  }
+  .about-image::after {
+    content:'';
+    position:absolute; bottom:0; right:0;
+    width:180px; height:180px;
+    background:var(--green); opacity:0.15; border-radius:50%;
+    transform:translate(40%,40%);
+  }
+  .about-features { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:32px; }
+  .about-feat {
+    display:flex; align-items:flex-start; gap:12px;
+    background:var(--green-pale); border-radius:10px; padding:14px;
+  }
+  .about-feat-icon { font-size:20px; }
+  .about-feat-text { font-size:14px; font-weight:500; color:var(--dark); }
+
+  /* SERVICES */
+  #services { background:var(--cream); }
+  .services-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:24px; }
+  .service-card {
+    background:var(--white); border-radius:var(--radius); padding:32px 28px;
+    border:1px solid var(--green-mid); transition:box-shadow 0.25s, transform 0.2s;
+  }
+  .service-card:hover { box-shadow:var(--shadow); transform:translateY(-4px); }
+  .service-icon { font-size:36px; margin-bottom:18px; }
+  .service-card h3 { font-size:17px; font-weight:600; color:var(--dark); margin-bottom:10px; }
+  .service-card p { font-size:14px; color:var(--muted); line-height:1.7; }
+
+  /* TEAM */
+  #team { background:var(--white); }
+  .team-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:28px; }
+  .team-card {
+    background:var(--cream); border-radius:var(--radius); overflow:hidden;
+    border:1px solid var(--green-mid); transition:box-shadow 0.2s;
+  }
+  .team-card:hover { box-shadow:var(--shadow); }
+  .team-avatar {
+    height:180px;
+    background:linear-gradient(135deg, var(--green-pale), var(--green-mid));
+    display:flex; align-items:center; justify-content:center; font-size:60px;
+  }
+  .team-info { padding:20px 22px; }
+  .team-info h3 { font-size:17px; font-weight:600; color:var(--dark); margin-bottom:4px; }
+  .team-role { font-size:13px; color:var(--green); font-weight:500; margin-bottom:8px; }
+  .team-bio { font-size:13px; color:var(--muted); line-height:1.6; }
+
+  /* APPOINTMENTS */
+  #appointments { background: linear-gradient(135deg, var(--dark) 0%, #0d3321 100%); }
+  #appointments .section-title { color:#fff; }
+  #appointments .section-label { color: var(--green-mid); }
+  #appointments .section-sub { color: rgba(255,255,255,0.6); }
+  .appt-grid { display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start; }
+  .appt-form {
+    background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
+    border-radius:var(--radius); padding:36px;
+  }
+  .form-group { margin-bottom:20px; }
+  .form-group label { display:block; font-size:13px; font-weight:500; color:rgba(255,255,255,0.7); margin-bottom:7px; }
+  .form-group input, .form-group select, .form-group textarea {
+    width:100%; border-radius:9px; border:1px solid rgba(255,255,255,0.15);
+    background:rgba(255,255,255,0.08); color:#fff;
+    padding:12px 14px; font-size:14px; font-family:'DM Sans',sans-serif;
+    outline:none; transition:border 0.2s;
+  }
+  .form-group input::placeholder, .form-group textarea::placeholder { color:rgba(255,255,255,0.35); }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color:var(--green-light);
+  }
+  .form-group select option { background:#0d3321; color:#fff; }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .btn-submit {
+    width:100%; background:var(--green); color:#fff; border:none; border-radius:10px;
+    padding:15px; font-size:15px; font-weight:600; cursor:pointer;
+    font-family:'DM Sans',sans-serif; transition:background 0.2s; margin-top:4px;
+  }
+  .btn-submit:hover { background:var(--green-light); }
+  .appt-info { color:rgba(255,255,255,0.8); }
+  .appt-info h3 { font-family:'Playfair Display',serif; font-size:24px; color:#fff; margin-bottom:20px; }
+  .appt-hours { list-style:none; margin-bottom:32px; }
+  .appt-hours li {
+    display:flex; justify-content:space-between;
+    padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.08);
+    font-size:14px;
+  }
+  .appt-hours li:last-child { border:none; }
+  .appt-hours .day { color:rgba(255,255,255,0.6); }
+  .appt-hours .time { color:#fff; font-weight:500; }
+  .success-msg {
+    display:none; background:rgba(26,107,74,0.3); border:1px solid var(--green);
+    color:var(--green-mid); border-radius:9px; padding:14px 16px;
+    font-size:14px; text-align:center; margin-top:12px;
+  }
+
+  /* CAREERS */
+  #careers { background:var(--cream); }
+  .careers-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:56px; }
+  .job-card {
+    background:var(--white); border-radius:var(--radius); padding:28px;
+    border:1px solid var(--green-mid); transition:box-shadow 0.2s;
+  }
+  .job-card:hover { box-shadow:var(--shadow); }
+  .job-tag {
+    display:inline-block; background:var(--green-pale); color:var(--green);
+    font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase;
+    border-radius:100px; padding:4px 12px; margin-bottom:14px;
+  }
+  .job-card h3 { font-size:18px; font-weight:600; color:var(--dark); margin-bottom:8px; }
+  .job-card p { font-size:14px; color:var(--muted); line-height:1.7; margin-bottom:16px; }
+  .job-meta { display:flex; gap:16px; flex-wrap:wrap; }
+  .job-meta span { font-size:13px; color:var(--muted); display:flex; align-items:center; gap:5px; }
+  .apply-section {
+    background:var(--white); border-radius:var(--radius); padding:40px;
+    border:1px solid var(--green-mid); max-width:680px; margin:0 auto;
+  }
+  .apply-section h3 { font-family:'Playfair Display',serif; font-size:26px; color:var(--dark); margin-bottom:6px; }
+  .apply-section p { color:var(--muted); font-size:14px; margin-bottom:28px; }
+  .apply-form .form-group label { color:var(--text); }
+  .apply-form .form-group input, .apply-form .form-group select, .apply-form .form-group textarea {
+    background:var(--cream); border:1px solid var(--green-mid); color:var(--text);
+  }
+  .apply-form .form-group input::placeholder { color:var(--muted); }
+  .apply-form .form-group input:focus, .apply-form .form-group select:focus { border-color:var(--green); }
+  .apply-form .form-group select option { background:var(--cream); color:var(--dark); }
+  .apply-form .btn-submit { background:var(--green); }
+  .apply-success { display:none; background:var(--green-pale); border:1px solid var(--green-mid); color:var(--green); border-radius:9px; padding:14px; text-align:center; font-size:14px; margin-top:12px; }
+
+  /* CONTACT */
+  #contact { background:var(--white); }
+  .contact-grid { display:grid; grid-template-columns:1fr 1.4fr; gap:48px; }
+  .contact-info h3 { font-family:'Playfair Display',serif; font-size:24px; color:var(--dark); margin-bottom:24px; }
+  .contact-item { display:flex; gap:14px; margin-bottom:22px; align-items:flex-start; }
+  .contact-item-icon {
+    width:42px; height:42px; border-radius:10px;
+    background:var(--green-pale); display:flex; align-items:center; justify-content:center;
+    font-size:18px; flex-shrink:0;
+  }
+  .contact-item-text strong { display:block; font-size:14px; font-weight:600; color:var(--dark); margin-bottom:3px; }
+  .contact-item-text span { font-size:14px; color:var(--muted); line-height:1.6; }
+  .map-wrapper {
+    border-radius:var(--radius); overflow:hidden;
+    border:1px solid var(--green-mid); height:380px;
+    background:var(--green-pale); display:flex; align-items:center; justify-content:center;
+    flex-direction:column; gap:12px;
+  }
+  .map-placeholder-icon { font-size:48px; }
+  .map-placeholder-text { font-size:15px; color:var(--green); font-weight:600; }
+  .map-placeholder-sub { font-size:13px; color:var(--muted); }
+  .map-link {
+    margin-top:8px; background:var(--green); color:#fff; border-radius:8px;
+    padding:10px 22px; font-size:14px; font-weight:600; text-decoration:none;
+    display:inline-block; transition:background 0.2s;
+  }
+  .map-link:hover { background:var(--green-light); }
+
+  /* FOOTER */
+  footer {
+    background:var(--dark); color:rgba(255,255,255,0.6);
+    padding:48px 5% 32px;
+  }
+  .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr; gap:48px; margin-bottom:40px; }
+  .footer-brand .logo-text { color:#fff; }
+  .footer-brand p { font-size:14px; line-height:1.75; margin-top:14px; max-width:300px; }
+  .footer-col h4 { font-size:14px; font-weight:600; color:#fff; margin-bottom:16px; }
+  .footer-col ul { list-style:none; }
+  .footer-col ul li { margin-bottom:10px; }
+  .footer-col ul li a { color:rgba(255,255,255,0.55); font-size:14px; text-decoration:none; transition:color 0.2s; }
+  .footer-col ul li a:hover { color:var(--green-mid); }
+  .footer-bottom { border-top:1px solid rgba(255,255,255,0.08); padding-top:24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+  .footer-bottom p { font-size:13px; }
+
+  /* RESPONSIVE */
+  @media(max-width:900px) {
+    .hero { grid-template-columns:1fr; padding-top:100px; }
+    .hero-visual { display:none; }
+    .about-grid, .appt-grid, .contact-grid, .footer-grid { grid-template-columns:1fr; }
+    .services-grid, .team-grid { grid-template-columns:1fr 1fr; }
+    .careers-grid { grid-template-columns:1fr; }
+    .nav-links { display:none; }
+    .hamburger { display:flex; }
+  }
+  @media(max-width:600px) {
+    .services-grid, .team-grid { grid-template-columns:1fr; }
+    .hero-card-row { grid-template-columns:1fr; }
+    .about-features { grid-template-columns:1fr; }
+    .form-row { grid-template-columns:1fr; }
+    .hero-stats { flex-wrap:wrap; gap:20px; }
+    .footer-grid { grid-template-columns:1fr; gap:28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#home" class="logo">
+    <div class="logo-icon">🏃</div>
+    <div>
+      <div class="logo-text">The Movement Clinic</div>
+      <div class="logo-sub">Salem, Tamil Nadu</div>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#team">Our Team</a></li>
+    <li><a href="#careers">Careers</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#appointments" class="nav-cta">Book Appointment</a>
+  <button class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section id="home" class="hero">
+  <div class="hero-content">
+    <div class="hero-badge"><span></span> Now Accepting New Patients</div>
+    <h1>Move Better.<br/>Live <em>Fuller.</em><br/>Recover Stronger.</h1>
+    <p>Exceptional physiotherapy care in Salem. We are dedicated to helping you achieve lasting results through movement, personalised attention, and expert guidance.</p>
+    <div class="hero-actions">
+      <a href="#appointments" class="btn-primary">Book Appointment</a>
+      <a href="#services" class="btn-outline">Our Services</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">45,000+</div><div class="stat-label">Patients Helped</div></div>
+      <div class="stat"><div class="stat-num">25+</div><div class="stat-label">Years Experience</div></div>
+      <div class="stat"><div class="stat-num">98%</div><div class="stat-label">Satisfaction Rate</div></div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-card-row">
+      <div class="hero-card">
+        <div class="hero-card-icon">🦴</div>
+        <h3>Orthopaedic</h3>
+        <p>Joint & bone recovery</p>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-icon">🧠</div>
+        <h3>Neuro Rehab</h3>
+        <p>Neurological recovery</p>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-card-icon">🏃</div>
+      <h3>Movement & Recovery</h3>
+      <p>Personalised physiotherapy programmes designed around your body, goals and lifestyle — so you can move freely again.</p>
+    </div>
+    <div class="hero-card-row">
+      <div class="hero-card">
+        <div class="hero-card-icon">💪</div>
+        <h3>Sports Injury</h3>
+        <p>Get back in the game</p>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-icon">🧘</div>
+        <h3>Posture & Pain</h3>
+        <p>Chronic pain relief</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-image">🏥</div>
+    <div>
+      <div class="section-label">About Us</div>
+      <h2 class="section-title">Where Movement Transforms Lives</h2>
+      <p style="color:var(--muted);font-size:16px;line-height:1.8;margin-bottom:20px;">
+        Experience exceptional care at <strong>The Movement Clinic, Salem</strong>, where we are dedicated to helping you achieve lasting results. Located near <strong>Megawin Switch Gear Company</strong> and <strong>Game Changers Turf</strong>, our clinic serves the Salem area with a passion for empowering individuals through movement and personalised attention.
+      </p>
+      <p style="color:var(--muted);font-size:16px;line-height:1.8;margin-bottom:28px;">
+        Our expert team of physiotherapists focuses on providing comprehensive support, guiding you on a journey to relief and full recovery. We believe in the power of movement to transform lives, offering a pathway to better health and well-being.
+      </p>
+      <div class="about-features">
+        <div class="about-feat"><div class="about-feat-icon">✅</div><div class="about-feat-text">Expert Physiotherapists</div></div>
+        <div class="about-feat"><div class="about-feat-icon">✅</div><div class="about-feat-text">Personalised Treatment</div></div>
+        <div class="about-feat"><div class="about-feat-icon">✅</div><div class="about-feat-text">Modern Equipment</div></div>
+        <div class="about-feat"><div class="about-feat-icon">✅</div><div class="about-feat-text">Compassionate Care</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-header center">
+    <div class="section-label">What We Offer</div>
+    <h2 class="section-title">Our Services</h2>
+    <p class="section-sub">Comprehensive physiotherapy treatments tailored to your individual needs and recovery goals.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">🦴</div>
+      <h3>Orthopaedic Physiotherapy</h3>
+      <p>Treatment for joint pain, fractures, post-surgical recovery, arthritis, and musculoskeletal conditions.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🧠</div>
+      <h3>Neurological Rehabilitation</h3>
+      <p>Specialised therapy for stroke, Parkinson's disease, nerve injuries, and neurological disorders.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🏃</div>
+      <h3>Sports Injury Rehabilitation</h3>
+      <p>Get athletes and active individuals back to peak performance after sprains, tears, and sports injuries.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🧘</div>
+      <h3>Posture & Chronic Pain</h3>
+      <p>Assessment and correction of postural imbalances, back pain, neck pain, and chronic discomfort.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">👴</div>
+      <h3>Geriatric Physiotherapy</h3>
+      <p>Gentle, effective care for elderly patients — improving mobility, balance, and quality of life.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🤰</div>
+      <h3>Women's Health Physio</h3>
+      <p>Pre- and post-natal care, pelvic floor therapy, and support through every stage of womanhood.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team">
+  <div class="section-header center">
+    <div class="section-label">Meet the Team</div>
+    <h2 class="section-title">Our Expert Physiotherapists</h2>
+    <p class="section-sub">Qualified, caring professionals committed to your recovery and well-being.</p>
+  </div>
+  <div class="team-grid" style="grid-template-columns:repeat(1,1fr);max-width:400px;margin:0 auto;">
+    <div class="team-card">
+      <div class="team-avatar">👩‍⚕️</div>
+      <div class="team-info">
+        <h3>Dr. Vinothini K</h3>
+        <div class="team-role">Lead Physiotherapist</div>
+        <p class="team-bio">BPT — 25 years of dedicated experience in physiotherapy and rehabilitation. Founder and lead clinician of The Movement Clinic, Salem, with a passion for empowering patients through movement and personalised care.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APPOINTMENTS -->
+<section id="appointments">
+  <div class="appt-grid">
+    <div class="appt-info">
+      <div class="section-label">Book a Visit</div>
+      <h2 class="section-title" style="color:#fff;">Schedule Your Appointment</h2>
+      <p class="section-sub">Fill in your details and we will confirm your slot. Walk-ins also welcome during clinic hours.</p>
+      <br/>
+      <h3>Clinic Hours</h3>
+      <ul class="appt-hours" style="margin-top:14px;">
+        <li><span class="day">Monday – Friday</span><span class="time">8:00 AM – 7:00 PM</span></li>
+        <li><span class="day">Saturday</span><span class="time">9:00 AM – 5:00 PM</span></li>
+        <li><span class="day">Sunday</span><span class="time">Closed</span></li>
+      </ul>
+      <div style="background:rgba(255,255,255,0.06);border-radius:12px;padding:20px;margin-top:8px;">
+        <p style="font-size:14px;color:rgba(255,255,255,0.7);margin-bottom:8px;">📞 Call us directly</p>
+        <p style="font-size:22px;font-weight:600;color:#fff;">+91 98944 07934</p>
+        <p style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:4px;">Available during clinic hours</p>
+      </div>
+    </div>
+    <div class="appt-form">
+      <h3 style="color:#fff;font-family:'Playfair Display',serif;font-size:22px;margin-bottom:24px;">Book an Appointment</h3>
+      <div class="form-group">
+        <label>Full Name *</label>
+        <input type="text" id="appt-name" placeholder="Your full name"/>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Phone Number *</label>
+          <input type="tel" id="appt-phone" placeholder="+91 XXXXX XXXXX"/>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="appt-email" placeholder="your@email.com"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Preferred Date *</label>
+          <input type="date" id="appt-date"/>
+        </div>
+        <div class="form-group">
+          <label>Preferred Time *</label>
+          <select id="appt-time">
+            <option value="">Select time</option>
+            <option>8:00 AM</option><option>9:00 AM</option><option>10:00 AM</option>
+            <option>11:00 AM</option><option>12:00 PM</option><option>2:00 PM</option>
+            <option>3:00 PM</option><option>4:00 PM</option><option>5:00 PM</option>
+            <option>6:00 PM</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Service Required</label>
+        <select id="appt-service">
+          <option value="">Select a service</option>
+          <option>Orthopaedic Physiotherapy</option>
+          <option>Neurological Rehabilitation</option>
+          <option>Sports Injury Rehabilitation</option>
+          <option>Posture & Chronic Pain</option>
+          <option>Geriatric Physiotherapy</option>
+          <option>Women's Health Physio</option>
+          <option>General Consultation</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Briefly describe your condition</label>
+        <textarea id="appt-msg" rows="3" placeholder="e.g. knee pain after running, back pain for 3 months..."></textarea>
+      </div>
+      <button class="btn-submit" onclick="submitAppointment()">Confirm Appointment</button>
+      <div class="success-msg" id="appt-success">✅ Thank you! We will call you within 2 hours to confirm your slot.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CAREERS -->
+<section id="careers">
+  <div class="section-header center">
+    <div class="section-label">Join Our Team</div>
+    <h2 class="section-title">Current Vacancies</h2>
+    <p class="section-sub">We are growing and looking for passionate healthcare professionals to join The Movement Clinic family.</p>
+  </div>
+  <div class="careers-grid" style="grid-template-columns:1fr;max-width:680px;margin:0 auto 56px;">
+    <div class="job-card">
+      <div class="job-tag">Full-Time · Now Hiring</div>
+      <h3>Clinical Physiotherapist</h3>
+      <p>We are looking for a qualified and passionate Clinical Physiotherapist to join our growing team at The Movement Clinic, Salem. You will work closely with Dr. Vinothini K to deliver high-quality, patient-centred physiotherapy care across a range of conditions.</p>
+      <p style="margin-top:10px;"><strong style="color:var(--dark);">Key responsibilities:</strong> Assess and treat patients, develop individualised treatment plans, maintain patient records, and contribute to the clinic's mission of empowering people through movement.</p>
+      <div class="job-meta" style="margin-top:16px;">
+        <span>📍 Salem, Tamil Nadu</span>
+        <span>🎓 BPT Required</span>
+        <span>💰 Salary based on skill & experience</span>
+        <span>✅ Freshers may apply</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Apply Form -->
+  <div class="apply-section">
+    <h3>Apply Now</h3>
+    <p>Fill in your details below and we will get back to you within 3 working days.</p>
+    <div class="apply-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" id="apply-name" placeholder="Your full name"/>
+        </div>
+        <div class="form-group">
+          <label>Phone Number *</label>
+          <input type="tel" id="apply-phone" placeholder="+91 XXXXX XXXXX"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Email Address *</label>
+          <input type="email" id="apply-email" placeholder="your@email.com"/>
+        </div>
+        <div class="form-group">
+          <label>Position Applying For *</label>
+          <select id="apply-role">
+            <option value="">Select a position</option>
+            <option>Clinical Physiotherapist (BPT)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Qualification</label>
+          <input type="text" id="apply-qual" placeholder="e.g. BPT, 12th pass..."/>
+        </div>
+        <div class="form-group">
+          <label>Years of Experience</label>
+          <select id="apply-exp">
+            <option value="">Select</option>
+            <option>Fresher</option>
+            <option>Less than 1 year</option>
+            <option>1–3 years</option>
+            <option>3–5 years</option>
+            <option>5+ years</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Why do you want to join us?</label>
+        <textarea id="apply-msg" rows="3" placeholder="Tell us a little about yourself and your motivation..."></textarea>
+      </div>
+      <button class="btn-submit" onclick="submitApplication()">Submit Application</button>
+      <div class="apply-success" id="apply-success">✅ Application received! We will review and contact you within 3 working days.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-header">
+    <div class="section-label">Find Us</div>
+    <h2 class="section-title">Contact & Location</h2>
+    <p class="section-sub">We'd love to hear from you. Visit us or get in touch below.</p>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <h3>Get In Touch</h3>
+      <div class="contact-item">
+        <div class="contact-item-icon">📍</div>
+        <div class="contact-item-text">
+          <strong>Address</strong>
+          <span>Near Megawin Switch Gear Company &<br/>Game Changers Turf, Salem,<br/>Tamil Nadu, India</span>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">📞</div>
+        <div class="contact-item-text">
+          <strong>Phone</strong>
+          <span>+91 98944 07934</span>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">✉️</div>
+        <div class="contact-item-text">
+          <strong>Email</strong>
+          <span>infothemovementclinc@gmail.com</span>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">🕐</div>
+        <div class="contact-item-text">
+          <strong>Working Hours</strong>
+          <span>Mon–Fri: 8:00 AM – 7:00 PM<br/>Saturday: 9:00 AM – 5:00 PM<br/>Sunday: Closed</span>
+        </div>
+      </div>
+    </div>
+    <div class="map-wrapper">
+      <div class="map-placeholder-icon">📍</div>
+      <div class="map-placeholder-text">The Movement Clinic, Salem</div>
+      <div class="map-placeholder-sub">Near Megawin Switch Gear Co. & Game Changers Turf</div>
+      <a href="https://share.google/M9ZKse7lQrMNZtQUR" target="_blank" class="map-link">📍 Open in Google Maps</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo">
+        <div class="logo-icon">🏃</div>
+        <div>
+          <div class="logo-text">The Movement Clinic</div>
+          <div class="logo-sub" style="color:rgba(255,255,255,0.4);">Salem, Tamil Nadu</div>
+        </div>
+      </div>
+      <p>Empowering individuals through movement and personalised physiotherapy care. Your recovery is our mission.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#services">Our Services</a></li>
+        <li><a href="#team">Our Team</a></li>
+        <li><a href="#appointments">Book Appointment</a></li>
+        <li><a href="#careers">Careers</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#services">Orthopaedic Physio</a></li>
+        <li><a href="#services">Neuro Rehab</a></li>
+        <li><a href="#services">Sports Injury</a></li>
+        <li><a href="#services">Posture & Pain</a></li>
+        <li><a href="#services">Geriatric Physio</a></li>
+        <li><a href="#services">Women's Health</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 The Movement Clinic, Salem. All rights reserved.</p>
+    <p>Made with ❤️ for better health in Salem</p>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const links = document.querySelector('.nav-links');
+    if (links.style.display === 'flex') {
+      links.style.display = 'none';
+    } else {
+      links.style.cssText =
+        'display:flex;flex-direction:column;position:absolute;top:68px;left:0;right:0;background:var(--cream);padding:20px 5%;border-bottom:1px solid var(--green-mid);gap:18px;';
+    }
+  }
+
+  // ✅ APPOINTMENT (CONNECTED TO BACKEND)
+  function submitAppointment() {
+    const name = document.getElementById('appt-name').value.trim();
+    const phone = document.getElementById('appt-phone').value.trim();
+    const date = document.getElementById('appt-date').value;
+    const time = document.getElementById('appt-time').value;
+    const service = document.getElementById('appt-service').value;
+    const message = document.getElementById('appt-msg').value.trim();
+
+    if (!name || !phone || !date || !time) {
+      alert('Please fill all required fields');
+      return;
+    }
+
+    fetch("http://localhost:5000/book", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ name, phone, date, time, service, message })
+    })
+    .then(res => res.text())
+    .then(data => {
+      alert(data);
+      document.getElementById('appt-success').style.display = 'block';
+
+      // clear form
+      document.getElementById('appt-name').value = '';
+      document.getElementById('appt-phone').value = '';
+      document.getElementById('appt-date').value = '';
+      document.getElementById('appt-time').value = '';
+      document.getElementById('appt-service').value = '';
+      document.getElementById('appt-msg').value = '';
+    })
+    .catch(err => {
+      alert("Server error");
+      console.log(err);
+    });
+  }
+
+  // ✅ JOB APPLICATION
+  function submitApplication() {
+    const name = document.getElementById('apply-name').value.trim();
+    const phone = document.getElementById('apply-phone').value.trim();
+    const email = document.getElementById('apply-email').value.trim();
+    const position = document.getElementById('apply-role').value;
+    const experience = document.getElementById('apply-exp').value;
+
+    if (!name || !phone || !email || !position) {
+      alert('Please fill all required fields');
+      return;
+    }
+
+    fetch("http://localhost:5000/apply", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ name, phone, email, position, experience })
+    })
+    .then(res => res.text())
+    .then(data => {
+      alert(data);
+      document.getElementById('apply-success').style.display = 'block';
+
+      // clear form
+      document.getElementById('apply-name').value = '';
+      document.getElementById('apply-phone').value = '';
+      document.getElementById('apply-email').value = '';
+      document.getElementById('apply-role').value = '';
+      document.getElementById('apply-exp').value = '';
+    })
+    .catch(err => {
+      alert("Server error");
+      console.log(err);
+    });
+  }
+
+  // ✅ FIXED PART (IMPORTANT)
+  window.onload = function () {
+    const today = new Date().toISOString().split('T')[0];
+    const dateInput = document.getElementById('appt-date');
+
+    if (dateInput) {
+      dateInput.setAttribute('min', today);
+    }
+  };
+</script>
+</body>
+</html>

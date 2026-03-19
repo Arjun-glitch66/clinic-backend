@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Applications Dashboard</title>
+    <style>
+    body {
+        font-family: Arial;
+        background: #f5f7fa;
+        padding: 20px;
+    }
+    h1 {
+        color: #2c3e50;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+    }
+    th, td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: center;
+    }
+    th {
+        background: #3498db;
+        color: white;
+    }
+    button {
+        background: red;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+<h1>📄 Applications Dashboard</h1>
+
+<table id="table">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Position</th>
+        <th>Experience</th>
+        <th>Action</th>
+    </tr>
+</table>
+
+<script>
+fetch("http://localhost:5000/applications")
+.then(res => res.json())
+.then(data => {
+    let table = document.getElementById("table");
+
+    data.forEach(row => {
+        let tr = document.createElement("tr");
+
+        tr.innerHTML = `
+            <td>${row.id}</td>
+            <td>${row.name}</td>
+            <td>${row.email}</td>
+            <td>${row.phone}</td>
+            <td>${row.position}</td>
+            <td>${row.experience}</td>
+            <td><button onclick="deleteRow(${row.id})">❌</button></td>
+        `;
+
+        table.appendChild(tr);
+    });
+});
+
+function deleteRow(id) {
+    fetch(`http://localhost:5000/delete_application/${id}`, {
+        method: "DELETE"
+    })
+    .then(res => res.text())
+    .then(msg => {
+        alert(msg);
+        location.reload();
+    });
+}
+</script>
+
+</body>
+</html>

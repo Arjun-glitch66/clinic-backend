@@ -738,6 +738,8 @@
 </footer>
 
 <script>
+  const API_URL = "https://clinic-backend-wg1k.onrender.com";
+
   function toggleMenu() {
     const links = document.querySelector('.nav-links');
     if (links.style.display === 'flex') {
@@ -748,7 +750,7 @@
     }
   }
 
-  // ✅ APPOINTMENT (CONNECTED TO BACKEND)
+  // ✅ APPOINTMENT
   function submitAppointment() {
     const name = document.getElementById('appt-name').value.trim();
     const phone = document.getElementById('appt-phone').value.trim();
@@ -762,7 +764,7 @@
       return;
     }
 
-    fetch("http://localhost:5000/book", {
+    fetch(`${API_URL}/book`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -774,7 +776,6 @@
       alert(data);
       document.getElementById('appt-success').style.display = 'block';
 
-      // clear form
       document.getElementById('appt-name').value = '';
       document.getElementById('appt-phone').value = '';
       document.getElementById('appt-date').value = '';
@@ -783,7 +784,7 @@
       document.getElementById('appt-msg').value = '';
     })
     .catch(err => {
-      alert("Server error");
+      alert("Server error ❌");
       console.log(err);
     });
   }
@@ -801,7 +802,7 @@
       return;
     }
 
-    fetch("http://localhost:5000/apply", {
+    fetch(`${API_URL}/apply`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -813,7 +814,6 @@
       alert(data);
       document.getElementById('apply-success').style.display = 'block';
 
-      // clear form
       document.getElementById('apply-name').value = '';
       document.getElementById('apply-phone').value = '';
       document.getElementById('apply-email').value = '';
@@ -821,12 +821,11 @@
       document.getElementById('apply-exp').value = '';
     })
     .catch(err => {
-      alert("Server error");
+      alert("Server error ❌");
       console.log(err);
     });
   }
 
-  // ✅ FIXED PART (IMPORTANT)
   window.onload = function () {
     const today = new Date().toISOString().split('T')[0];
     const dateInput = document.getElementById('appt-date');

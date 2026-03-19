@@ -12,12 +12,15 @@ app.use(cors({
 app.use(express.json());
 
 // ✅ MySQL Connection (ENV based)
-const db = mysql.createConnection({
+const db = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASS,
     database: process.env.DB_NAME,
     port: process.env.DB_PORT,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0,
     ssl: {
         rejectUnauthorized: false
     }
@@ -34,10 +37,15 @@ db.connect((err) => {
 
 // ✅ Email Setup (ENV based)
 const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false, // IMPORTANT
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
+    },
+    tls: {
+        rejectUnauthorized: false
     }
 });
 

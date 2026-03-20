@@ -9,7 +9,7 @@ const app = express();
 app.use(cors({ origin: "*" }));
 app.use(express.json());
 
-// ✅ MySQL Pool (STABLE)
+// ✅ MySQL Pool
 const db = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -34,13 +34,13 @@ db.getConnection((err, connection) => {
     }
 });
 
-// ✅ EMAIL SETUP (BREVO - FIXED)
+// ✅ EMAIL SETUP (BREVO)
 const transporter = nodemailer.createTransport({
     host: "smtp-relay.brevo.com",
     port: 587,
     secure: false,
     auth: {
-        user: process.env.EMAIL_USER,   // ✅ no quotes
+        user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     }
 });
@@ -81,10 +81,10 @@ app.post("/book", (req, res) => {
             return res.status(500).send("Database Error");
         }
 
-        // 📩 EMAIL
+        // 📩 EMAIL (BACKGROUND — NO WAIT)
         const mailOptions = {
-            from: "arjunanand206@gmail.com",   // ✅ VERIFIED EMAIL
-            to: "arjunanand206@gmail.com",     // ✅ YOUR INBOX
+            from: "arjunanand206@gmail.com",   // verified sender
+            to: "arjunanand206@gmail.com",     // your inbox
             subject: "New Appointment",
             text: `New Appointment:
 Name: ${name}
@@ -98,12 +98,13 @@ Message: ${message}`
         transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
                 console.log("❌ Email Error:", err);
-                return res.send("Appointment Booked but Email Failed ❌");
             } else {
                 console.log("✅ Email Sent:", info.response);
-                res.send("Appointment Booked & Email Sent ✅");
             }
         });
+
+        // ✅ SEND RESPONSE IMMEDIATELY (FIXES DELAY)
+        res.send("Appointment Submitted Successfully ✅");
     });
 });
 
@@ -126,10 +127,10 @@ app.post("/apply", (req, res) => {
             return res.status(500).send("Database Error");
         }
 
-        // 📩 EMAIL
+        // 📩 EMAIL (BACKGROUND — NO WAIT)
         const mailOptions = {
-            from: "arjunanand206@gmail.com",   // ✅ VERIFIED EMAIL
-            to: "arjunanand206@gmail.com",     // ✅ YOUR INBOX
+            from: "arjunanand206@gmail.com",
+            to: "arjunanand206@gmail.com",
             subject: "New Job Application",
             text: `New Job Application:
 Name: ${name}
@@ -142,12 +143,13 @@ Experience: ${experience}`
         transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
                 console.log("❌ Email Error:", err);
-                return res.send("Application Submitted but Email Failed ❌");
             } else {
                 console.log("✅ Email Sent:", info.response);
-                res.send("Application Submitted & Email Sent ✅");
             }
         });
+
+        // ✅ IMMEDIATE RESPONSE
+        res.send("Application Submitted Successfully ✅");
     });
 });
 

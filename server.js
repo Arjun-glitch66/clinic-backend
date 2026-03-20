@@ -34,7 +34,7 @@ db.getConnection((err, connection) => {
     }
 });
 
-// ✅ EMAIL SETUP (BREVO)
+// ✅ EMAIL SETUP (BREVO - FIXED)
 const transporter = nodemailer.createTransport({
     host: "smtp-relay.brevo.com",
     port: 587,
@@ -42,6 +42,9 @@ const transporter = nodemailer.createTransport({
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
+    },
+    tls: {
+        rejectUnauthorized: false
     }
 });
 
@@ -81,10 +84,11 @@ app.post("/book", (req, res) => {
             return res.status(500).send("Database Error");
         }
 
-        // 📩 EMAIL (BACKGROUND — NO WAIT)
+        console.log("📩 Sending email...");
+
         const mailOptions = {
-            from: "arjunanand206@gmail.com",   // verified sender
-            to: "arjunanand206@gmail.com",     // your inbox
+            from: "arjunanand206@gmail.com",
+            to: "arjunanand206@gmail.com",
             subject: "New Appointment",
             text: `New Appointment:
 Name: ${name}
@@ -103,7 +107,6 @@ Message: ${message}`
             }
         });
 
-        // ✅ SEND RESPONSE IMMEDIATELY (FIXES DELAY)
         res.send("Appointment Submitted Successfully ✅");
     });
 });
@@ -127,7 +130,8 @@ app.post("/apply", (req, res) => {
             return res.status(500).send("Database Error");
         }
 
-        // 📩 EMAIL (BACKGROUND — NO WAIT)
+        console.log("📩 Sending email...");
+
         const mailOptions = {
             from: "arjunanand206@gmail.com",
             to: "arjunanand206@gmail.com",
@@ -148,16 +152,13 @@ Experience: ${experience}`
             }
         });
 
-        // ✅ IMMEDIATE RESPONSE
         res.send("Application Submitted Successfully ✅");
     });
 });
 
 // ✅ DELETE APPOINTMENT
 app.delete("/delete/:id", (req, res) => {
-    const id = req.params.id;
-
-    db.query("DELETE FROM appointments WHERE id = ?", [id], (err) => {
+    db.query("DELETE FROM appointments WHERE id = ?", [req.params.id], (err) => {
         if (err) {
             console.log(err);
             res.status(500).send("Delete Error");
@@ -181,9 +182,7 @@ app.get("/applications", (req, res) => {
 
 // ✅ DELETE APPLICATION
 app.delete("/delete_application/:id", (req, res) => {
-    const id = req.params.id;
-
-    db.query("DELETE FROM applications WHERE id = ?", [id], (err) => {
+    db.query("DELETE FROM applications WHERE id = ?", [req.params.id], (err) => {
         if (err) {
             console.log(err);
             res.status(500).send("Delete Error");

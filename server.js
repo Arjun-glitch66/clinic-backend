@@ -6,12 +6,10 @@ const nodemailer = require("nodemailer");
 const app = express();
 
 // ✅ Middleware
-app.use(cors({
-    origin: "*"
-}));
+app.use(cors({ origin: "*" }));
 app.use(express.json());
 
-// ✅ MySQL Connection (ENV based)
+// ✅ MySQL Pool (STABLE)
 const db = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -36,27 +34,25 @@ db.getConnection((err, connection) => {
     }
 });
 
-// ✅ Email Setup (ENV based)
+// ✅ EMAIL SETUP (BREVO - FIXED)
 const transporter = nodemailer.createTransport({
     host: "smtp-relay.brevo.com",
     port: 587,
     secure: false,
     auth: {
-        user: "process.env.EMAIL_USER",
-        pass: "process.env.EMAIL_PASS"
+        user: process.env.EMAIL_USER,   // ✅ no quotes
+        pass: process.env.EMAIL_PASS
     }
 });
 
-// ✅ Test route
+// ✅ TEST ROUTE
 app.get("/", (req, res) => {
     res.send("Server running ✅");
 });
 
-// ✅ Get all appointments
+// ✅ GET APPOINTMENTS
 app.get("/appointments", (req, res) => {
-    const sql = "SELECT * FROM appointments ORDER BY date, time";
-
-    db.query(sql, (err, result) => {
+    db.query("SELECT * FROM appointments ORDER BY date, time", (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send("Error fetching appointments");
@@ -85,10 +81,10 @@ app.post("/book", (req, res) => {
             return res.status(500).send("Database Error");
         }
 
-        // 📩 Send Email
+        // 📩 EMAIL
         const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: process.env.EMAIL_USER,
+            from: "arjunanand206@gmail.com",   // ✅ VERIFIED EMAIL
+            to: "arjunanand206@gmail.com",     // ✅ YOUR INBOX
             subject: "New Appointment",
             text: `New Appointment:
 Name: ${name}
@@ -102,12 +98,12 @@ Message: ${message}`
         transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
                 console.log("❌ Email Error:", err);
+                return res.send("Appointment Booked but Email Failed ❌");
             } else {
                 console.log("✅ Email Sent:", info.response);
+                res.send("Appointment Booked & Email Sent ✅");
             }
         });
-
-        res.send("Appointment Booked & Email Sent ✅");
     });
 });
 
@@ -130,10 +126,10 @@ app.post("/apply", (req, res) => {
             return res.status(500).send("Database Error");
         }
 
-        // 📩 Send Email
+        // 📩 EMAIL
         const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: process.env.EMAIL_USER,
+            from: "arjunanand206@gmail.com",   // ✅ VERIFIED EMAIL
+            to: "arjunanand206@gmail.com",     // ✅ YOUR INBOX
             subject: "New Job Application",
             text: `New Job Application:
 Name: ${name}
@@ -146,12 +142,12 @@ Experience: ${experience}`
         transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
                 console.log("❌ Email Error:", err);
+                return res.send("Application Submitted but Email Failed ❌");
             } else {
                 console.log("✅ Email Sent:", info.response);
+                res.send("Application Submitted & Email Sent ✅");
             }
         });
-
-        res.send("Application Submitted & Email Sent ✅");
     });
 });
 
@@ -195,7 +191,7 @@ app.delete("/delete_application/:id", (req, res) => {
     });
 });
 
-// ✅ START SERVER (IMPORTANT FIX FOR RAILWAY)
+// ✅ START SERVER
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {

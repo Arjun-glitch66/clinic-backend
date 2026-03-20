@@ -91,7 +91,7 @@ Service: ${service}
 Message: ${message}`
         }, {
             headers: {
-                "api-key": process.env.EMAIL_PASS, // ✅ API KEY
+                "api-key": process.env.EMAIL_PASS.replace(/\s+/g, ''), // ✅ API KEY
                 "Content-Type": "application/json"
             }
         })
@@ -142,7 +142,7 @@ Position: ${position}
 Experience: ${experience}`
         }, {
             headers: {
-                "api-key": process.env.EMAIL_PASS,
+                "api-key": process.env.EMAIL_PASS.replace(/\s+/g, ''),
                 "Content-Type": "application/json"
             }
         })

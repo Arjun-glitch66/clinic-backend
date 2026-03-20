@@ -1,7 +1,7 @@
 const express = require("express");
 const mysql = require("mysql2");
 const cors = require("cors");
-const nodemailer = require("nodemailer");
+const axios = require("axios"); // ✅ NEW
 
 const app = express();
 
@@ -31,20 +31,6 @@ db.getConnection((err, connection) => {
     } else {
         console.log("✅ MySQL Pool Connected");
         connection.release();
-    }
-});
-
-// ✅ EMAIL SETUP (BREVO - FIXED)
-const transporter = nodemailer.createTransport({
-    host: "smtp-relay.brevo.com",
-    port: 587,
-    secure: false,
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    },
-    tls: {
-        rejectUnauthorized: false
     }
 });
 
@@ -84,29 +70,35 @@ app.post("/book", (req, res) => {
             return res.status(500).send("Database Error");
         }
 
-        console.log("📩 Sending email...");
+        console.log("📩 Sending email via API...");
 
-        const mailOptions = {
-            from: "arjunanand206@gmail.com",
-            to: "arjunanand206@gmail.com",
+        // ✅ BREVO API CALL
+        axios.post("https://api.brevo.com/v3/smtp/email", {
+            sender: {
+                name: "Movement Clinic",
+                email: "arjunanand206@gmail.com"
+            },
+            to: [
+                { email: "arjunanand206@gmail.com" }
+            ],
             subject: "New Appointment",
-            text: `New Appointment:
+            textContent: `New Appointment:
 Name: ${name}
 Phone: ${phone}
 Date: ${date}
 Time: ${time}
 Service: ${service}
 Message: ${message}`
-        };
-
-        transporter.sendMail(mailOptions, (err, info) => {
-            if (err) {
-                console.log("❌ Email Error:", err);
-            } else {
-                console.log("✅ Email Sent:", info.response);
+        }, {
+            headers: {
+                "api-key": process.env.EMAIL_PASS, // ✅ API KEY
+                "Content-Type": "application/json"
             }
-        });
+        })
+        .then(() => console.log("✅ Email Sent via API"))
+        .catch(err => console.log("❌ Email API Error:", err.response?.data || err.message));
 
+        // ✅ instant response
         res.send("Appointment Submitted Successfully ✅");
     });
 });
@@ -130,27 +122,32 @@ app.post("/apply", (req, res) => {
             return res.status(500).send("Database Error");
         }
 
-        console.log("📩 Sending email...");
+        console.log("📩 Sending email via API...");
 
-        const mailOptions = {
-            from: "arjunanand206@gmail.com",
-            to: "arjunanand206@gmail.com",
+        // ✅ BREVO API CALL
+        axios.post("https://api.brevo.com/v3/smtp/email", {
+            sender: {
+                name: "Movement Clinic",
+                email: "arjunanand206@gmail.com"
+            },
+            to: [
+                { email: "arjunanand206@gmail.com" }
+            ],
             subject: "New Job Application",
-            text: `New Job Application:
+            textContent: `New Job Application:
 Name: ${name}
 Phone: ${phone}
 Email: ${email}
 Position: ${position}
 Experience: ${experience}`
-        };
-
-        transporter.sendMail(mailOptions, (err, info) => {
-            if (err) {
-                console.log("❌ Email Error:", err);
-            } else {
-                console.log("✅ Email Sent:", info.response);
+        }, {
+            headers: {
+                "api-key": process.env.EMAIL_PASS,
+                "Content-Type": "application/json"
             }
-        });
+        })
+        .then(() => console.log("✅ Email Sent via API"))
+        .catch(err => console.log("❌ Email API Error:", err.response?.data || err.message));
 
         res.send("Application Submitted Successfully ✅");
     });

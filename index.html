@@ -4,391 +4,652 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>The Movement Clinic – Salem</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,200;0,300;0,400;1,200;1,300&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --green: #1a6b4a;
-    --green-light: #2d8f63;
-    --green-pale: #e8f5ef;
-    --green-mid: #c2e0d1;
-    --cream: #faf8f4;
-    --dark: #111a15;
-    --text: #2a3a30;
-    --muted: #6b7f72;
-    --white: #ffffff;
-    --radius: 14px;
-    --shadow: 0 4px 32px rgba(26,107,74,0.10);
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  html { scroll-behavior: smooth; }
-  body { font-family: 'DM Sans', sans-serif; color: var(--text); background: var(--cream); }
+/* ─── RESET ─────────────────────────────────────── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
 
-  /* NAV */
-  nav {
-    position: fixed; top:0; left:0; right:0; z-index:100;
-    background: rgba(250,248,244,0.95);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--green-mid);
-    padding: 0 5%;
-    display: flex; align-items: center; justify-content: space-between;
-    height: 68px;
-  }
-  .logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
-  .logo-icon {
-    width:38px; height:38px; border-radius:10px;
-    background: var(--green);
-    display:flex; align-items:center; justify-content:center;
-    font-size:18px;
-  }
-  .logo-text { font-family:'Playfair Display',serif; font-size:18px; font-weight:700; color:var(--dark); line-height:1.1; }
-  .logo-sub { font-size:11px; color:var(--muted); font-weight:400; letter-spacing:0.5px; }
-  .nav-links { display:flex; gap:32px; list-style:none; }
-  .nav-links a { text-decoration:none; color:var(--text); font-size:14px; font-weight:500; transition:color 0.2s; }
-  .nav-links a:hover { color:var(--green); }
-  .nav-cta {
-    background:var(--green); color:#fff; border:none; border-radius:8px;
-    padding:10px 22px; font-size:14px; font-weight:600; cursor:pointer;
-    font-family:'DM Sans',sans-serif; transition:background 0.2s;
-    text-decoration:none;
-  }
-  .nav-cta:hover { background:var(--green-light); }
-  .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; }
-  .hamburger span { width:24px; height:2px; background:var(--dark); border-radius:2px; display:block; }
-
-  /* HERO */
-  .hero {
-    min-height: 100vh;
-    padding: 120px 5% 80px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    align-items: center;
-    background: linear-gradient(135deg, var(--cream) 60%, var(--green-pale) 100%);
-    position: relative;
-    overflow: hidden;
-  }
-  .hero::before {
-    content:'';
-    position:absolute; top:-100px; right:-100px;
-    width:500px; height:500px;
-    background: radial-gradient(circle, rgba(26,107,74,0.08) 0%, transparent 70%);
-    border-radius:50%;
-  }
-  .hero-badge {
-    display:inline-flex; align-items:center; gap:8px;
-    background:var(--green-pale); border:1px solid var(--green-mid);
-    border-radius:100px; padding:6px 14px;
-    font-size:13px; color:var(--green); font-weight:500;
-    margin-bottom:24px;
-  }
-  .hero-badge span { width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block; animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-  .hero h1 {
-    font-family:'Playfair Display',serif;
-    font-size: clamp(38px, 5vw, 62px);
-    font-weight:700; line-height:1.12;
-    color:var(--dark);
-    margin-bottom:20px;
-  }
-  .hero h1 em { color:var(--green); font-style:normal; }
-  .hero p { font-size:17px; color:var(--muted); line-height:1.75; margin-bottom:36px; max-width:480px; }
-  .hero-actions { display:flex; gap:14px; flex-wrap:wrap; }
-  .btn-primary {
-    background:var(--green); color:#fff; border:none; border-radius:10px;
-    padding:14px 30px; font-size:15px; font-weight:600; cursor:pointer;
-    font-family:'DM Sans',sans-serif; text-decoration:none;
-    transition:background 0.2s, transform 0.1s;
-    display:inline-block;
-  }
-  .btn-primary:hover { background:var(--green-light); transform:translateY(-1px); }
-  .btn-outline {
-    background:transparent; color:var(--green); border:1.5px solid var(--green);
-    border-radius:10px; padding:14px 30px; font-size:15px; font-weight:600;
-    cursor:pointer; font-family:'DM Sans',sans-serif; text-decoration:none;
-    transition:background 0.2s; display:inline-block;
-  }
-  .btn-outline:hover { background:var(--green-pale); }
-  .hero-stats { display:flex; gap:32px; margin-top:44px; }
-  .stat { }
-  .stat-num { font-family:'Playfair Display',serif; font-size:32px; font-weight:700; color:var(--green); }
-  .stat-label { font-size:13px; color:var(--muted); margin-top:2px; }
-  .hero-visual {
-    display:flex; flex-direction:column; gap:16px; position:relative;
-  }
-  .hero-card {
-    background:var(--white); border-radius:var(--radius); padding:24px 28px;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--green-mid);
-  }
-  .hero-card-icon { font-size:28px; margin-bottom:12px; }
-  .hero-card h3 { font-size:16px; font-weight:600; color:var(--dark); margin-bottom:6px; }
-  .hero-card p { font-size:14px; color:var(--muted); line-height:1.6; }
-  .hero-card-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-
-  /* SECTIONS */
-  section { padding: 90px 5%; }
-  .section-label {
-    font-size:12px; font-weight:600; letter-spacing:2px; text-transform:uppercase;
-    color:var(--green); margin-bottom:12px;
-  }
-  .section-title {
-    font-family:'Playfair Display',serif;
-    font-size: clamp(28px, 3.5vw, 42px);
-    font-weight:700; color:var(--dark); line-height:1.2; margin-bottom:16px;
-  }
-  .section-sub { font-size:16px; color:var(--muted); line-height:1.75; max-width:560px; }
-  .section-header { margin-bottom:56px; }
-  .section-header.center { text-align:center; }
-  .section-header.center .section-sub { margin:0 auto; }
-
-  /* ABOUT */
-  #about { background:var(--white); }
-  .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
-  .about-image {
-    background: linear-gradient(135deg, var(--green-pale), var(--green-mid));
-    border-radius:20px; height:420px;
-    display:flex; align-items:center; justify-content:center;
-    font-size:80px; position:relative; overflow:hidden;
-  }
-  .about-image::after {
-    content:'';
-    position:absolute; bottom:0; right:0;
-    width:180px; height:180px;
-    background:var(--green); opacity:0.15; border-radius:50%;
-    transform:translate(40%,40%);
-  }
-  .about-features { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:32px; }
-  .about-feat {
-    display:flex; align-items:flex-start; gap:12px;
-    background:var(--green-pale); border-radius:10px; padding:14px;
-  }
-  .about-feat-icon { font-size:20px; }
-  .about-feat-text { font-size:14px; font-weight:500; color:var(--dark); }
-
-/* SERVICES */
-#services { background:var(--cream); }
-
-.services-grid {
-    display:grid;
-    grid-template-columns:repeat(3, 1fr);
-    gap:24px;
+:root {
+  --g1: #0a1f14;
+  --g2: #112b1c;
+  --g3: #163b25;
+  --g4: #1e5234;
+  --g5: #276942;
+  --g6: #2e8050;
+  --g-accent: #3da666;
+  --g-bright: #5ec98a;
+  --g-line:  rgba(62,166,102,0.18);
+  --g-pale:  rgba(62,166,102,0.07);
+  --cream:   #f7f5f0;
+  --cream2:  #f0ede6;
+  --text:    #1a2e20;
+  --muted:   #6b8070;
+  --white:   #ffffff;
+  --ease: cubic-bezier(0.4,0,0.2,1);
+  --spring: cubic-bezier(0.34,1.56,0.64,1);
 }
 
-.service-card {
-    background:var(--white);
-    border-radius:var(--radius);
-    padding:32px 28px;
-    border:1px solid var(--green-mid);
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  overflow-x: hidden;
+  cursor: none;
+}
+::selection { background: var(--g-accent); color: #fff; }
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--g1); }
+::-webkit-scrollbar-thumb { background: var(--g5); border-radius: 99px; }
 
-    /* smooth animation */
-    transition: all 0.3s ease;
+/* ─── CURSOR ────────────────────────────────────── */
+#cur-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--g-bright);
+  position: fixed; top:0; left:0; z-index:9999;
+  pointer-events: none;
+  transform: translate(-50%,-50%);
+}
+#cur-ring {
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 1px solid rgba(94,201,138,0.45);
+  position: fixed; top:0; left:0; z-index:9998;
+  pointer-events: none;
+  transform: translate(-50%,-50%);
+  transition: width .3s var(--ease), height .3s var(--ease), opacity .3s;
+}
+#cur-ring.big { width: 50px; height: 50px; opacity:.5; }
+@media(hover:none){ #cur-dot,#cur-ring{ display:none; } body{ cursor:auto; } }
 
-    /* scroll animation initial state */
-    opacity: 0;
-    transform: translateY(20px);
+/* ─── GRAIN OVERLAY ─────────────────────────────── */
+body::after {
+  content:''; position:fixed; inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity:.022; pointer-events:none; z-index:9997;
 }
 
-.service-card:hover { 
-    box-shadow:var(--shadow);
-    transform: translateY(-6px) scale(1.02);
+/* ─── INTRO PANEL ───────────────────────────────── */
+#intro {
+  position: fixed; inset: 0; z-index: 500;
+  background: var(--g1);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 0;
+  overflow: hidden;
+  transition: opacity 1s var(--ease);
+}
+#intro.gone { opacity:0; pointer-events:none; }
+
+.intro-ring {
+  position: absolute; border-radius: 50%;
+  border: 1px solid rgba(62,166,102,0.12);
+  animation: ring-expand 3s ease-out forwards;
+}
+.intro-ring:nth-child(1){ width:200px;height:200px; animation-delay:0s; }
+.intro-ring:nth-child(2){ width:400px;height:400px; animation-delay:.2s; }
+.intro-ring:nth-child(3){ width:650px;height:650px; animation-delay:.4s; }
+.intro-ring:nth-child(4){ width:900px;height:900px; animation-delay:.6s; }
+@keyframes ring-expand {
+  from { opacity:0; transform:scale(.6); }
+  to   { opacity:1; transform:scale(1); }
 }
 
-.service-icon { font-size:36px; margin-bottom:18px; }
+.intro-glow {
+  position: absolute; width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(46,128,80,0.35) 0%, transparent 70%);
+  animation: glow-pulse 2.5s ease-in-out infinite;
+}
+@keyframes glow-pulse { 0%,100%{transform:scale(1);opacity:.7} 50%{transform:scale(1.15);opacity:1} }
 
-.service-card h3 {
-    font-size:17px;
-    font-weight:600;
-    color:var(--dark);
-    margin-bottom:10px;
+.intro-logo {
+  position: relative; z-index: 2; text-align: center;
+}
+.intro-clinic-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(40px, 7vw, 88px);
+  font-weight: 200;
+  color: var(--white);
+  letter-spacing: 0.06em;
+  line-height: 1;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: intro-fadein 1s var(--ease) .5s forwards;
+}
+.intro-tagline {
+  font-size: clamp(11px, 1.2vw, 14px);
+  font-weight: 400;
+  color: var(--g-bright);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  margin-top: 16px;
+  opacity: 0;
+  animation: intro-fadein .8s var(--ease) 1s forwards;
+}
+.intro-line {
+  width: 1px; height: 0; background: var(--g-accent);
+  margin: 24px auto 0;
+  animation: line-grow .8s var(--ease) 1.4s forwards;
+}
+@keyframes intro-fadein { to{ opacity:1; transform:translateY(0); } }
+@keyframes line-grow    { to{ height: 56px; } }
+
+.intro-scroll-hint {
+  position: absolute; bottom: 48px;
+  font-size: 11px; letter-spacing:.22em; text-transform:uppercase;
+  color: rgba(255,255,255,0.35);
+  opacity:0; animation: intro-fadein .6s ease 2s forwards;
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+}
+.intro-scroll-hint::after {
+  content:''; width:1px; height:32px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+  display:block;
 }
 
-.service-card p {
-    font-size:14px;
-    color:var(--muted);
-    line-height:1.7;
+/* ─── HERO PARALLAX SECTION ─────────────────────── */
+#hero-anchor {
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+.hero-sticky {
+  position: sticky; top: 0;
+  height: 100vh;
+  background: var(--g1);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
 }
 
-/* SAME animation for others */
-.team-card, .job-card {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.6s ease;
+/* bg mesh */
+.hero-mesh {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 50% at 70% 40%, rgba(46,128,80,0.22) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 20% 70%, rgba(26,92,62,0.15) 0%, transparent 70%);
+}
+.hero-grid-lines {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(62,166,102,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(62,166,102,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
 }
 
-  /* TEAM */
-  #team { background:var(--white); }
-  .team-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:28px; }
-  .team-card {
-    background:var(--cream); border-radius:var(--radius); overflow:hidden;
-    border:1px solid var(--green-mid); transition:box-shadow 0.2s;
-  }
-  .team-card:hover { box-shadow:var(--shadow); }
-  .team-avatar {
-    height:180px;
-    background:linear-gradient(135deg, var(--green-pale), var(--green-mid));
-    display:flex; align-items:center; justify-content:center; font-size:60px;
-  }
-  .team-info { padding:20px 22px; }
-  .team-info h3 { font-size:17px; font-weight:600; color:var(--dark); margin-bottom:4px; }
-  .team-role { font-size:13px; color:var(--green); font-weight:500; margin-bottom:8px; }
-  .team-bio { font-size:13px; color:var(--muted); line-height:1.6; }
+/* the big title that scrolls */
+.hero-title-wrap {
+  position: relative; z-index: 2; text-align: center;
+  will-change: transform, opacity;
+}
+.hero-eyebrow {
+  font-size: 11px; letter-spacing:.3em; text-transform:uppercase;
+  color: var(--g-bright); margin-bottom: 24px;
+  display:flex; align-items:center; justify-content:center; gap:14px;
+  opacity:0; animation: intro-fadein .6s ease 2.8s forwards;
+}
+.hero-eyebrow::before, .hero-eyebrow::after {
+  content:''; width:40px; height:1px; background:var(--g-accent); opacity:.5;
+}
+.hero-main-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(54px, 10vw, 130px);
+  font-weight: 200;
+  color: var(--white);
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+  opacity:0; animation: intro-fadein .8s ease 2.6s forwards;
+}
+.hero-main-text em {
+  font-style: italic; color: var(--g-bright);
+}
+.hero-sub-text {
+  font-size: clamp(13px,1.4vw,16px); font-weight:300;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.06em;
+  margin-top: 24px;
+  opacity:0; animation: intro-fadein .6s ease 3s forwards;
+}
 
-  /* APPOINTMENTS */
-  #appointments { background: linear-gradient(135deg, var(--dark) 0%, #0d3321 100%); }
-  #appointments .section-title { color:#fff; }
-  #appointments .section-label { color: var(--green-mid); }
-  #appointments .section-sub { color: rgba(255,255,255,0.6); }
-  .appt-grid { display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start; }
-  .appt-form {
-    background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
-    border-radius:var(--radius); padding:36px;
-  }
-  .form-group { margin-bottom:20px; }
-  .form-group label { display:block; font-size:13px; font-weight:500; color:rgba(255,255,255,0.7); margin-bottom:7px; }
-  .form-group input, .form-group select, .form-group textarea {
-    width:100%; border-radius:9px; border:1px solid rgba(255,255,255,0.15);
-    background:rgba(255,255,255,0.08); color:#fff;
-    padding:12px 14px; font-size:14px; font-family:'DM Sans',sans-serif;
-    outline:none; transition:border 0.2s;
-  }
-  .form-group input::placeholder, .form-group textarea::placeholder { color:rgba(255,255,255,0.35); }
-  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-    border-color:var(--green-light);
-  }
-  .form-group select option { background:#0d3321; color:#fff; }
-  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-  .btn-submit {
-    width:100%; background:var(--green); color:#fff; border:none; border-radius:10px;
-    padding:15px; font-size:15px; font-weight:600; cursor:pointer;
-    font-family:'DM Sans',sans-serif; transition:background 0.2s; margin-top:4px;
-  }
-  .btn-submit:hover { background:var(--green-light); }
-  .appt-info { color:rgba(255,255,255,0.8); }
-  .appt-info h3 { font-family:'Playfair Display',serif; font-size:24px; color:#fff; margin-bottom:20px; }
-  .appt-hours { list-style:none; margin-bottom:32px; }
-  .appt-hours li {
-    display:flex; justify-content:space-between;
-    padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.08);
-    font-size:14px;
-  }
-  .appt-hours li:last-child { border:none; }
-  .appt-hours .day { color:rgba(255,255,255,0.6); }
-  .appt-hours .time { color:#fff; font-weight:500; }
-  .success-msg {
-    display:none; background:rgba(26,107,74,0.3); border:1px solid var(--green);
-    color:var(--green-mid); border-radius:9px; padding:14px 16px;
-    font-size:14px; text-align:center; margin-top:12px;
-  }
+/* bottom indicator */
+.hero-scroll-cue {
+  position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction:column; align-items:center; gap:8px;
+  opacity:0; animation: intro-fadein .6s ease 3.2s forwards;
+  z-index:3;
+}
+.hero-scroll-cue span { font-size:10px; letter-spacing:.2em; color:rgba(255,255,255,0.3); text-transform:uppercase; }
+.scroll-arrow {
+  width:20px; height:20px;
+  border-right: 1px solid rgba(255,255,255,0.3);
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  transform: rotate(45deg);
+  animation: bounce-arr 1.8s ease infinite;
+}
+@keyframes bounce-arr { 0%,100%{transform:rotate(45deg) translateY(0);opacity:.4} 50%{transform:rotate(45deg) translateY(4px);opacity:1} }
 
-  /* CAREERS */
-  #careers { background:var(--cream); }
-  .careers-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:56px; }
-  .job-card {
-    background:var(--white); border-radius:var(--radius); padding:28px;
-    border:1px solid var(--green-mid); transition:box-shadow 0.2s;
-  }
-  .job-card:hover { box-shadow:var(--shadow); }
-  .job-tag {
-    display:inline-block; background:var(--green-pale); color:var(--green);
-    font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase;
-    border-radius:100px; padding:4px 12px; margin-bottom:14px;
-  }
-  .job-card h3 { font-size:18px; font-weight:600; color:var(--dark); margin-bottom:8px; }
-  .job-card p { font-size:14px; color:var(--muted); line-height:1.7; margin-bottom:16px; }
-  .job-meta { display:flex; gap:16px; flex-wrap:wrap; }
-  .job-meta span { font-size:13px; color:var(--muted); display:flex; align-items:center; gap:5px; }
-  .apply-section {
-    background:var(--white); border-radius:var(--radius); padding:40px;
-    border:1px solid var(--green-mid); max-width:680px; margin:0 auto;
-  }
-  .apply-section h3 { font-family:'Playfair Display',serif; font-size:26px; color:var(--dark); margin-bottom:6px; }
-  .apply-section p { color:var(--muted); font-size:14px; margin-bottom:28px; }
-  .apply-form .form-group label { color:var(--text); }
-  .apply-form .form-group input, .apply-form .form-group select, .apply-form .form-group textarea {
-    background:var(--cream); border:1px solid var(--green-mid); color:var(--text);
-  }
-  .apply-form .form-group input::placeholder { color:var(--muted); }
-  .apply-form .form-group input:focus, .apply-form .form-group select:focus { border-color:var(--green); }
-  .apply-form .form-group select option { background:var(--cream); color:var(--dark); }
-  .apply-form .btn-submit { background:var(--green); }
-  .apply-success { display:none; background:var(--green-pale); border:1px solid var(--green-mid); color:var(--green); border-radius:9px; padding:14px; text-align:center; font-size:14px; margin-top:12px; }
+/* ─── NAV ───────────────────────────────────────── */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:400;
+  display: flex; align-items:center; justify-content:space-between;
+  padding: 0 5%; height: 72px;
+  transition: background .4s, box-shadow .4s, height .3s;
+}
+nav.dark {
+  background: rgba(10,31,20,0.92);
+  backdrop-filter: blur(16px) saturate(160%);
+  box-shadow: 0 1px 0 rgba(62,166,102,0.12);
+  height: 62px;
+}
+nav.light {
+  background: rgba(247,245,240,0.94);
+  backdrop-filter: blur(16px) saturate(180%);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.07);
+  height: 62px;
+}
+.logo { display:flex; align-items:center; gap:12px; text-decoration:none; }
+.logo-mark {
+  width:34px; height:34px; border-radius:9px; background:var(--g-accent);
+  display:flex; align-items:center; justify-content:center; font-size:16px;
+  transition: transform .4s var(--spring);
+}
+.logo:hover .logo-mark { transform: rotate(-8deg) scale(1.1); }
+.logo-name-dark  { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:400; color:#fff; line-height:1.1; }
+.logo-name-light { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:400; color:var(--text); line-height:1.1; }
+.logo-sub-dark   { font-size:10px; color:rgba(255,255,255,0.35); letter-spacing:.08em; text-transform:uppercase; }
+.logo-sub-light  { font-size:10px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; }
+.nav-links { display:flex; gap:34px; list-style:none; }
+.nav-links a {
+  font-size:13px; font-weight:400; text-decoration:none;
+  letter-spacing:.03em; transition:color .2s;
+  position:relative;
+}
+.nav-links a::after {
+  content:''; position:absolute; bottom:-3px; left:0; right:0;
+  height:1px; background:var(--g-accent);
+  transform:scaleX(0); transform-origin:left; transition:transform .3s var(--ease);
+}
+.nav-links a:hover::after { transform:scaleX(1); }
+nav.dark  .nav-links a { color:rgba(255,255,255,.55); }
+nav.dark  .nav-links a:hover { color:#fff; }
+nav.light .nav-links a { color:var(--muted); }
+nav.light .nav-links a:hover { color:var(--text); }
+.nav-cta {
+  background:var(--g-accent); color:#fff; border:none; border-radius:7px;
+  padding:10px 22px; font-size:13px; font-weight:500;
+  font-family:'Outfit',sans-serif; text-decoration:none; cursor:none;
+  transition:background .2s, transform .25s var(--spring), box-shadow .25s;
+  display:inline-block;
+}
+.nav-cta:hover { background:var(--g6); transform:translateY(-2px); box-shadow:0 8px 24px rgba(62,166,102,0.3); }
+.hamburger { display:none; flex-direction:column; gap:5px; cursor:none; background:none; border:none; }
+.hamburger span { width:22px; height:1.5px; border-radius:2px; display:block; transition:background .3s; }
+nav.dark  .hamburger span { background:#fff; }
+nav.light .hamburger span { background:var(--text); }
 
-  /* CONTACT */
-  #contact { background:var(--white); }
-  .contact-grid { display:grid; grid-template-columns:1fr 1.4fr; gap:48px; }
-  .contact-info h3 { font-family:'Playfair Display',serif; font-size:24px; color:var(--dark); margin-bottom:24px; }
-  .contact-item { display:flex; gap:14px; margin-bottom:22px; align-items:flex-start; }
-  .contact-item-icon {
-    width:42px; height:42px; border-radius:10px;
-    background:var(--green-pale); display:flex; align-items:center; justify-content:center;
-    font-size:18px; flex-shrink:0;
-  }
-  .contact-item-text strong { display:block; font-size:14px; font-weight:600; color:var(--dark); margin-bottom:3px; }
-  .contact-item-text span { font-size:14px; color:var(--muted); line-height:1.6; }
-  .map-wrapper {
-    border-radius:var(--radius); overflow:hidden;
-    border:1px solid var(--green-mid); height:380px;
-    background:var(--green-pale); display:flex; align-items:center; justify-content:center;
-    flex-direction:column; gap:12px;
-  }
-  .map-placeholder-icon { font-size:48px; }
-  .map-placeholder-text { font-size:15px; color:var(--green); font-weight:600; }
-  .map-placeholder-sub { font-size:13px; color:var(--muted); }
-  .map-link {
-    margin-top:8px; background:var(--green); color:#fff; border-radius:8px;
-    padding:10px 22px; font-size:14px; font-weight:600; text-decoration:none;
-    display:inline-block; transition:background 0.2s;
-  }
-  .map-link:hover { background:var(--green-light); }
+/* ─── REVEAL ────────────────────────────────────── */
+.reveal { opacity:0; transform:translateY(24px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
+.reveal.visible { opacity:1; transform:translateY(0); }
+.d1{transition-delay:.08s} .d2{transition-delay:.16s} .d3{transition-delay:.24s}
+.d4{transition-delay:.32s} .d5{transition-delay:.40s}
 
-  /* FOOTER */
-  footer {
-    background:var(--dark); color:rgba(255,255,255,0.6);
-    padding:48px 5% 32px;
-  }
-  .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr; gap:48px; margin-bottom:40px; }
-  .footer-brand .logo-text { color:#fff; }
-  .footer-brand p { font-size:14px; line-height:1.75; margin-top:14px; max-width:300px; }
-  .footer-col h4 { font-size:14px; font-weight:600; color:#fff; margin-bottom:16px; }
-  .footer-col ul { list-style:none; }
-  .footer-col ul li { margin-bottom:10px; }
-  .footer-col ul li a { color:rgba(255,255,255,0.55); font-size:14px; text-decoration:none; transition:color 0.2s; }
-  .footer-col ul li a:hover { color:var(--green-mid); }
-  .footer-bottom { border-top:1px solid rgba(255,255,255,0.08); padding-top:24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
-  .footer-bottom p { font-size:13px; }
+/* ─── SECTION BASE ──────────────────────────────── */
+section { padding:100px 5%; }
+.s-label {
+  font-size:10px; font-weight:600; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--g-accent);
+  margin-bottom:14px;
+  display:flex; align-items:center; gap:10px;
+}
+.s-label::before { content:''; width:22px; height:1px; background:var(--g-accent); }
+.s-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(30px,4vw,52px);
+  font-weight:300; line-height:1.1;
+  letter-spacing:-.02em;
+  color:var(--text); margin-bottom:16px;
+}
+.s-title.white { color:#fff; }
+.s-sub { font-size:15px; font-weight:300; color:var(--muted); line-height:1.85; max-width:500px; }
+.s-sub.white { color:rgba(255,255,255,.5); }
+.s-head { margin-bottom:60px; }
+.s-head.center { text-align:center; }
+.s-head.center .s-label { justify-content:center; }
+.s-head.center .s-label::before { display:none; }
+.s-head.center .s-sub { margin:0 auto; }
 
-  /* RESPONSIVE */
-  @media(max-width:900px) {
-    .hero { grid-template-columns:1fr; padding-top:100px; }
-    .hero-visual { display:none; }
-    .about-grid, .appt-grid, .contact-grid, .footer-grid { grid-template-columns:1fr; }
-    .services-grid, .team-grid { grid-template-columns:1fr 1fr; }
-    .careers-grid { grid-template-columns:1fr; }
-    .nav-links { display:none; }
-    .hamburger { display:flex; }
-  }
-  @media(max-width:600px) {
-    .services-grid, .team-grid { grid-template-columns:1fr; }
-    .hero-card-row { grid-template-columns:1fr; }
-    .about-features { grid-template-columns:1fr; }
-    .form-row { grid-template-columns:1fr; }
-    .hero-stats { flex-wrap:wrap; gap:20px; }
-    .footer-grid { grid-template-columns:1fr; gap:28px; }
-  }
+/* ─── ABOUT ─────────────────────────────────────── */
+#about { background:var(--white); }
+.about-grid { display:grid; grid-template-columns:1fr 1.1fr; gap:80px; align-items:center; }
+.about-visual {
+  border-radius:20px; height:460px;
+  background: linear-gradient(145deg, #d4edd9, #a8d8b4);
+  display:flex; align-items:center; justify-content:center;
+  font-size:68px; position:relative; overflow:hidden;
+}
+.about-visual::before {
+  content:''; position:absolute; bottom:-60px; right:-60px;
+  width:220px; height:220px; border-radius:50%;
+  background:var(--g4); opacity:.15;
+}
+.about-visual::after {
+  content:''; position:absolute; top:-40px; left:-40px;
+  width:140px; height:140px; border-radius:50%;
+  background:var(--g5); opacity:.1;
+}
+.about-text p { font-size:15px; font-weight:300; color:var(--muted); line-height:1.9; margin-bottom:18px; }
+.about-text strong { color:var(--text); font-weight:500; }
+.about-feats { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:28px; }
+.feat-item {
+  display:flex; align-items:center; gap:10px;
+  background: rgba(62,166,102,0.06); border:1px solid rgba(62,166,102,0.12);
+  border-radius:8px; padding:12px 14px;
+  transition:background .2s, transform .25s var(--spring);
+}
+.feat-item:hover { background:rgba(62,166,102,0.12); transform:translateY(-2px); }
+.feat-item span { font-size:13px; font-weight:500; color:var(--text); }
+
+/* ─── SERVICES ──────────────────────────────────── */
+#services { background:var(--cream2); }
+.svc-grid {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:1px; background:rgba(62,166,102,0.12);
+  border:1px solid rgba(62,166,102,0.12);
+  border-radius:16px; overflow:hidden;
+}
+.svc-card {
+  background:var(--white); padding:36px 28px;
+  position:relative; overflow:hidden;
+  opacity:0; transform:translateY(18px);
+  transition:opacity .6s var(--ease), transform .6s var(--ease), background .3s;
+}
+.svc-card.visible { opacity:1; transform:translateY(0); }
+.svc-card:hover { background:rgba(62,166,102,0.04); }
+.svc-card::after {
+  content:''; position:absolute; bottom:0; left:0; right:0;
+  height:2px; background:var(--g-accent);
+  transform:scaleX(0); transform-origin:left; transition:transform .4s var(--ease);
+}
+.svc-card:hover::after { transform:scaleX(1); }
+.svc-num {
+  position:absolute; top:18px; right:22px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:52px; font-weight:200;
+  color:rgba(62,166,102,0.1); line-height:1;
+  transition:color .3s;
+}
+.svc-card:hover .svc-num { color:rgba(62,166,102,0.15); }
+.svc-icon {
+  width:44px; height:44px; border-radius:11px;
+  background:rgba(62,166,102,0.08); border:1px solid rgba(62,166,102,0.14);
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px; margin-bottom:18px;
+  transition:transform .3s var(--spring), background .3s;
+}
+.svc-card:hover .svc-icon { transform:scale(1.1) rotate(-5deg); background:rgba(62,166,102,0.15); }
+.svc-card h3 { font-size:16px; font-weight:600; color:var(--text); margin-bottom:9px; }
+.svc-card p  { font-size:13px; font-weight:300; color:var(--muted); line-height:1.75; }
+
+/* ─── TEAM ──────────────────────────────────────── */
+#team { background:var(--white); }
+.team-wrap { max-width:440px; margin:0 auto; }
+.team-card {
+  background:var(--cream2); border-radius:16px; overflow:hidden;
+  border:1px solid rgba(62,166,102,0.12);
+  opacity:0; transform:translateY(18px);
+  transition:opacity .6s var(--ease), transform .6s var(--ease), box-shadow .3s;
+}
+.team-card.visible { opacity:1; transform:translateY(0); }
+.team-card:hover { box-shadow:0 20px 60px rgba(26,82,52,.1); }
+.team-avatar {
+  height:200px;
+  background:linear-gradient(145deg,#d4edd9,#9ecfac);
+  display:flex; align-items:center; justify-content:center; font-size:56px;
+  position:relative; overflow:hidden;
+}
+.team-avatar::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(to top,rgba(10,31,20,.06),transparent);
+}
+.team-info { padding:24px 26px; }
+.team-info h3 { font-size:19px; font-weight:600; color:var(--text); margin-bottom:4px; }
+.team-role { font-size:11px; color:var(--g-accent); font-weight:500; letter-spacing:.08em; text-transform:uppercase; margin-bottom:12px; }
+.team-bio  { font-size:13px; font-weight:300; color:var(--muted); line-height:1.75; }
+
+/* ─── APPOINTMENTS ──────────────────────────────── */
+#appointments { background:var(--g1); position:relative; overflow:hidden; }
+#appointments::before {
+  content:''; position:absolute; top:-200px; right:-200px;
+  width:600px; height:600px; border-radius:50%;
+  background:radial-gradient(circle,rgba(46,128,80,.2) 0%,transparent 70%);
+  pointer-events:none;
+}
+#appointments::after {
+  content:''; position:absolute; bottom:-100px; left:-100px;
+  width:400px; height:400px; border-radius:50%;
+  background:radial-gradient(circle,rgba(22,59,37,.5) 0%,transparent 70%);
+  pointer-events:none;
+}
+.appt-grid { display:grid; grid-template-columns:1fr 1.1fr; gap:64px; align-items:start; position:relative; z-index:1; }
+.appt-form {
+  background:rgba(255,255,255,0.04); border:1px solid rgba(62,166,102,0.15);
+  border-radius:20px; padding:40px; backdrop-filter:blur(8px);
+}
+.appt-form-title {
+  font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:300;
+  color:#fff; margin-bottom:28px; letter-spacing:-.01em;
+}
+.form-group { margin-bottom:16px; }
+.form-group label {
+  display:block; font-size:10px; font-weight:500;
+  color:rgba(255,255,255,.4); margin-bottom:7px;
+  letter-spacing:.14em; text-transform:uppercase;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width:100%; background:rgba(255,255,255,.05);
+  border:1px solid rgba(62,166,102,0.15);
+  border-radius:8px; color:#fff;
+  padding:12px 14px; font-size:14px; font-weight:300;
+  font-family:'Outfit',sans-serif; outline:none;
+  transition:border-color .25s, background .25s;
+}
+.form-group input::placeholder,
+.form-group textarea::placeholder { color:rgba(255,255,255,.2); }
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color:rgba(62,166,102,.6); background:rgba(255,255,255,.08);
+}
+.form-group select option { background:#112b1c; color:#fff; }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.btn-submit {
+  width:100%; background:var(--g-accent); color:#fff; border:none; border-radius:8px;
+  padding:15px; font-size:14px; font-weight:500; letter-spacing:.03em;
+  font-family:'Outfit',sans-serif; cursor:none; margin-top:6px;
+  transition:background .25s, transform .25s var(--spring), box-shadow .25s;
+}
+.btn-submit:hover { background:var(--g6); transform:translateY(-2px); box-shadow:0 8px 28px rgba(62,166,102,.35); }
+.success-msg {
+  display:none; background:rgba(62,166,102,.15); border:1px solid rgba(62,166,102,.35);
+  color:#8edbb0; border-radius:8px; padding:14px 16px; font-size:13px;
+  text-align:center; margin-top:14px;
+}
+.appt-info-box {
+  background:rgba(255,255,255,.04); border:1px solid rgba(62,166,102,.12);
+  border-radius:14px; padding:24px;
+}
+.appt-info-box p:first-child { font-size:10px; color:rgba(255,255,255,.35); letter-spacing:.12em; text-transform:uppercase; margin-bottom:8px; }
+.appt-phone { font-size:28px; font-weight:600; color:#fff; letter-spacing:-.02em; }
+.appt-phone-sub { font-size:11px; color:rgba(255,255,255,.3); margin-top:4px; }
+.appt-hours { list-style:none; margin-top:24px; }
+.appt-hours li {
+  display:flex; justify-content:space-between;
+  padding:13px 0; border-bottom:1px solid rgba(255,255,255,.05);
+  font-size:14px; font-weight:300;
+}
+.appt-hours li:last-child { border:none; }
+.appt-hours .day { color:rgba(255,255,255,.4); }
+.appt-hours .time { color:#fff; font-weight:400; }
+
+/* ─── CAREERS ───────────────────────────────────── */
+#careers { background:var(--cream2); }
+.job-card {
+  background:var(--white); border-radius:14px; padding:32px;
+  border:1px solid rgba(62,166,102,0.12); max-width:700px; margin:0 auto 56px;
+  opacity:0; transform:translateY(18px);
+  transition:opacity .6s var(--ease), transform .6s var(--ease), box-shadow .3s;
+}
+.job-card.visible { opacity:1; transform:translateY(0); }
+.job-card:hover { box-shadow:0 16px 48px rgba(26,82,52,.08); }
+.job-tag {
+  display:inline-block; background:rgba(62,166,102,.08);
+  border:1px solid rgba(62,166,102,.16); color:var(--g-accent);
+  font-size:10px; font-weight:600; letter-spacing:.12em;
+  text-transform:uppercase; border-radius:100px; padding:4px 12px; margin-bottom:16px;
+}
+.job-card h3 { font-size:20px; font-weight:600; color:var(--text); margin-bottom:10px; }
+.job-card p  { font-size:13px; font-weight:300; color:var(--muted); line-height:1.75; margin-bottom:10px; }
+.job-meta { display:flex; gap:14px; flex-wrap:wrap; margin-top:14px; }
+.job-meta span { font-size:12px; color:var(--muted); }
+.apply-box {
+  background:var(--white); border-radius:20px; padding:48px;
+  border:1px solid rgba(62,166,102,.12); max-width:700px; margin:0 auto;
+}
+.apply-box h3 { font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:300; color:var(--text); margin-bottom:6px; }
+.apply-box>p  { font-size:14px; font-weight:300; color:var(--muted); margin-bottom:28px; }
+.apply-form .form-group label { color:var(--text); }
+.apply-form .form-group input,
+.apply-form .form-group select,
+.apply-form .form-group textarea {
+  background:var(--cream); border:1px solid rgba(62,166,102,.15); color:var(--text);
+}
+.apply-form .form-group input::placeholder { color:var(--muted); }
+.apply-form .form-group input:focus,
+.apply-form .form-group select:focus { border-color:var(--g-accent); background:var(--white); }
+.apply-form .form-group select option { background:var(--white); color:var(--text); }
+.apply-success {
+  display:none; background:rgba(62,166,102,.08); border:1px solid rgba(62,166,102,.2);
+  color:var(--g4); border-radius:8px; padding:14px; text-align:center; font-size:13px; margin-top:14px;
+}
+
+/* ─── CONTACT ───────────────────────────────────── */
+#contact { background:var(--white); }
+.contact-grid { display:grid; grid-template-columns:1fr 1.4fr; gap:60px; }
+.contact-info h3 { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; color:var(--text); margin-bottom:32px; letter-spacing:-.01em; }
+.c-item { display:flex; gap:16px; margin-bottom:24px; align-items:flex-start; }
+.c-icon {
+  width:44px; height:44px; border-radius:10px;
+  background:rgba(62,166,102,.07); border:1px solid rgba(62,166,102,.14);
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px; flex-shrink:0;
+  transition:transform .3s var(--spring), background .2s;
+}
+.c-item:hover .c-icon { transform:scale(1.1); background:rgba(62,166,102,.14); }
+.c-item strong { display:block; font-size:13px; font-weight:600; color:var(--text); margin-bottom:4px; }
+.c-item span   { font-size:14px; font-weight:300; color:var(--muted); line-height:1.65; }
+.map-box {
+  border-radius:20px; overflow:hidden; height:400px;
+  background:linear-gradient(145deg,#d4edd9,#c2e4cc);
+  border:1px solid rgba(62,166,102,.15);
+  display:flex; align-items:center; justify-content:center;
+  flex-direction:column; gap:10px;
+  transition:box-shadow .3s;
+}
+.map-box:hover { box-shadow:0 20px 60px rgba(26,82,52,.12); }
+.map-box-icon { font-size:40px; }
+.map-box-name { font-size:16px; color:var(--g4); font-weight:600; }
+.map-box-sub  { font-size:13px; color:var(--muted); text-align:center; max-width:240px; }
+.map-link {
+  margin-top:12px; background:var(--g-accent); color:#fff; border-radius:8px;
+  padding:11px 24px; font-size:13px; font-weight:500; text-decoration:none;
+  transition:background .2s, transform .25s var(--spring); display:inline-block;
+}
+.map-link:hover { background:var(--g6); transform:translateY(-2px); }
+
+/* ─── FOOTER ────────────────────────────────────── */
+footer { background:var(--g1); padding:64px 5% 36px; }
+.foot-grid { display:grid; grid-template-columns:2fr 1fr 1fr; gap:56px; margin-bottom:48px; }
+.foot-brand p { font-size:13px; font-weight:300; color:rgba(255,255,255,.35); line-height:1.8; margin-top:16px; max-width:280px; }
+.foot-col h4 { font-size:10px; font-weight:600; letter-spacing:.15em; text-transform:uppercase; color:rgba(255,255,255,.4); margin-bottom:18px; }
+.foot-col ul { list-style:none; }
+.foot-col ul li { margin-bottom:10px; }
+.foot-col ul li a { color:rgba(255,255,255,.28); font-size:14px; font-weight:300; text-decoration:none; transition:color .2s; }
+.foot-col ul li a:hover { color:rgba(204,237,214,.8); }
+.foot-bottom {
+  border-top:1px solid rgba(255,255,255,.05); padding-top:28px;
+  display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
+}
+.foot-bottom p { font-size:12px; font-weight:300; color:rgba(255,255,255,.2); }
+
+/* ─── BTNS SHARED ───────────────────────────────── */
+.btn-primary {
+  background:var(--g-accent); color:#fff; border:none; border-radius:8px;
+  padding:14px 30px; font-size:14px; font-weight:500;
+  font-family:'Outfit',sans-serif; text-decoration:none; cursor:none;
+  transition:background .25s, transform .25s var(--spring), box-shadow .25s;
+  display:inline-block;
+}
+.btn-primary:hover { background:var(--g6); transform:translateY(-3px); box-shadow:0 10px 28px rgba(62,166,102,.3); }
+.btn-outline {
+  background:transparent; color:rgba(255,255,255,.75);
+  border:1px solid rgba(255,255,255,.15); border-radius:8px;
+  padding:14px 30px; font-size:14px; font-weight:400;
+  font-family:'Outfit',sans-serif; text-decoration:none; cursor:none;
+  transition:background .25s, border-color .25s, transform .25s var(--spring);
+  display:inline-block;
+}
+.btn-outline:hover { background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.3); transform:translateY(-3px); }
+
+/* ─── RESPONSIVE ────────────────────────────────── */
+@media(max-width:960px){
+  .about-grid, .appt-grid, .contact-grid { grid-template-columns:1fr; }
+  .about-visual { height:280px; }
+  .svc-grid { grid-template-columns:repeat(2,1fr); }
+  .foot-grid { grid-template-columns:1fr 1fr; gap:36px; }
+  .nav-links { display:none; }
+  .hamburger { display:flex; }
+}
+@media(max-width:600px){
+  section { padding:72px 5%; }
+  .svc-grid { grid-template-columns:1fr; border-radius:0; }
+  .form-row { grid-template-columns:1fr; }
+  .about-feats { grid-template-columns:1fr; }
+  .foot-grid { grid-template-columns:1fr; gap:28px; }
+  .apply-box { padding:28px 20px; }
+  .hero-main-text { font-size:clamp(46px,12vw,70px); }
+}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
+<!-- ── CURSOR ─────────────────────────────────── -->
+<div id="cur-dot"></div>
+<div id="cur-ring"></div>
+
+<!-- ── INTRO SCREEN ──────────────────────────── -->
+<div id="intro">
+  <div class="intro-ring"></div>
+  <div class="intro-ring"></div>
+  <div class="intro-ring"></div>
+  <div class="intro-ring"></div>
+  <div class="intro-glow"></div>
+  <div class="intro-logo">
+    <div class="intro-clinic-name">The Movement Clinic</div>
+    <div class="intro-tagline">Salem · Tamil Nadu</div>
+    <div class="intro-line"></div>
+  </div>
+  <div class="intro-scroll-hint">Scroll to explore</div>
+</div>
+
+<!-- ── NAV ───────────────────────────────────── -->
+<nav id="nav" class="dark">
   <a href="#home" class="logo">
-    <div class="logo-icon">🏃</div>
+    <div class="logo-mark">🏃</div>
     <div>
-      <div class="logo-text">The Movement Clinic</div>
-      <div class="logo-sub">Salem, Tamil Nadu</div>
+      <div class="logo-name-dark" id="logoName">The Movement Clinic</div>
+      <div class="logo-sub-dark"  id="logoSub">Salem, Tamil Nadu</div>
     </div>
   </a>
-  <ul class="nav-links">
+  <ul class="nav-links" id="navLinks">
     <li><a href="#about">About</a></li>
     <li><a href="#services">Services</a></li>
     <li><a href="#team">Our Team</a></li>
@@ -396,132 +657,74 @@
     <li><a href="#contact">Contact</a></li>
   </ul>
   <a href="#appointments" class="nav-cta">Book Appointment</a>
-  <button class="hamburger" onclick="toggleMenu()">
-    <span></span><span></span><span></span>
-  </button>
+  <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
 </nav>
 
-<!-- HERO -->
-<section id="home" class="hero">
-  <div class="hero-content">
-    <div class="hero-badge"><span></span> Now Accepting New Patients</div>
-    <h1>Move Better.<br/>Live <em>Fuller.</em><br/>Recover Stronger.</h1>
-    <p>Exceptional physiotherapy care in Salem. We are dedicated to helping you achieve lasting results through movement, personalised attention, and expert guidance.</p>
-    <div class="hero-actions">
-      <a href="#appointments" class="btn-primary">Book Appointment</a>
-      <a href="#services" class="btn-outline">Our Services</a>
+<!-- ── HERO PARALLAX ─────────────────────────── -->
+<div id="hero-anchor">
+  <div class="hero-sticky" id="heroSticky">
+    <div class="hero-mesh"></div>
+    <div class="hero-grid-lines"></div>
+    <div class="hero-title-wrap" id="heroTitle">
+      <div class="hero-eyebrow">Physiotherapy · Rehabilitation · Recovery</div>
+      <div class="hero-main-text">Moving You<br/><em>Forward.</em></div>
+      <div class="hero-sub-text">The Movement Clinic · Salem, Tamil Nadu</div>
     </div>
-    <div class="hero-stats">
-      <div class="stat"><div class="stat-num">45,000+</div><div class="stat-label">Patients Helped</div></div>
-      <div class="stat"><div class="stat-num">25+</div><div class="stat-label">Years Experience</div></div>
-      <div class="stat"><div class="stat-num">98%</div><div class="stat-label">Satisfaction Rate</div></div>
-    </div>
-  </div>
-  <div class="hero-visual">
-    <div class="hero-card-row">
-      <div class="hero-card">
-        <div class="hero-card-icon">🦴</div>
-        <h3>Orthopaedic</h3>
-        <p>Joint & bone recovery</p>
-      </div>
-      <div class="hero-card">
-        <div class="hero-card-icon">🧠</div>
-        <h3>Neuro Rehab</h3>
-        <p>Neurological recovery</p>
-      </div>
-    </div>
-    <div class="hero-card">
-      <div class="hero-card-icon">🏃</div>
-      <h3>Movement & Recovery</h3>
-      <p>Personalised physiotherapy programmes designed around your body, goals and lifestyle — so you can move freely again.</p>
-    </div>
-    <div class="hero-card-row">
-      <div class="hero-card">
-        <div class="hero-card-icon">💪</div>
-        <h3>Sports Injury</h3>
-        <p>Get back in the game</p>
-      </div>
-      <div class="hero-card">
-        <div class="hero-card-icon">🧘</div>
-        <h3>Posture & Pain</h3>
-        <p>Chronic pain relief</p>
-      </div>
+    <div class="hero-scroll-cue">
+      <span>Scroll</span>
+      <div class="scroll-arrow"></div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- ABOUT -->
+<!-- ── ABOUT ──────────────────────────────────── -->
 <section id="about">
   <div class="about-grid">
-    <div class="about-image">🏥</div>
+    <div class="about-visual reveal">🏥</div>
     <div>
-      <div class="section-label">About Us</div>
-      <h2 class="section-title">Where Movement Transforms Lives</h2>
-      <p style="color:var(--muted);font-size:16px;line-height:1.8;margin-bottom:20px;">
-        Experience exceptional care at <strong>The Movement Clinic, Salem</strong>, where we are dedicated to helping you achieve lasting results. Located near <strong>Megawin Switch Gear Company</strong> and <strong>Game Changers Turf</strong>, our clinic serves the Salem area with a passion for empowering individuals through movement and personalised attention.
+      <div class="s-label reveal">About Us</div>
+      <h2 class="s-title reveal d1">Where Movement<br/>Transforms Lives</h2>
+      <p class="reveal d2" style="font-size:15px;font-weight:300;color:var(--muted);line-height:1.9;margin-bottom:18px;">
+        Experience exceptional care at <strong>The Movement Clinic, Salem</strong>, where we are dedicated to helping you achieve lasting results. Located near <strong>Megawin Switch Gear Company</strong> and <strong>Game Changers Turf</strong>, we serve the Salem area with a passion for empowering individuals through movement.
       </p>
-      <p style="color:var(--muted);font-size:16px;line-height:1.8;margin-bottom:28px;">
-        Our expert team of physiotherapists focuses on providing comprehensive support, guiding you on a journey to relief and full recovery. We believe in the power of movement to transform lives, offering a pathway to better health and well-being.
+      <p class="reveal d3" style="font-size:15px;font-weight:300;color:var(--muted);line-height:1.9;margin-bottom:24px;">
+        Our expert physiotherapists provide comprehensive support, guiding you on a journey to relief and full recovery.
       </p>
-      <div class="about-features">
-        <div class="about-feat"><div class="about-feat-icon">✅</div><div class="about-feat-text">Expert Physiotherapists</div></div>
-        <div class="about-feat"><div class="about-feat-icon">✅</div><div class="about-feat-text">Personalised Treatment</div></div>
-        <div class="about-feat"><div class="about-feat-icon">✅</div><div class="about-feat-text">Modern Equipment</div></div>
-        <div class="about-feat"><div class="about-feat-icon">✅</div><div class="about-feat-text">Compassionate Care</div></div>
+      <div class="about-feats">
+        <div class="feat-item reveal d2"><span>✅ Expert Physiotherapists</span></div>
+        <div class="feat-item reveal d3"><span>✅ Personalised Treatment</span></div>
+        <div class="feat-item reveal d4"><span>✅ Modern Equipment</span></div>
+        <div class="feat-item reveal d5"><span>✅ Compassionate Care</span></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- SERVICES -->
+<!-- ── SERVICES ──────────────────────────────── -->
 <section id="services">
-  <div class="section-header center">
-    <div class="section-label">What We Offer</div>
-    <h2 class="section-title">Our Services</h2>
-    <p class="section-sub">Comprehensive physiotherapy treatments tailored to your individual needs and recovery goals.</p>
+  <div class="s-head center">
+    <div class="s-label reveal">What We Offer</div>
+    <h2 class="s-title reveal d1">Our Services</h2>
+    <p class="s-sub reveal d2">Comprehensive physiotherapy tailored to your individual needs and recovery goals.</p>
   </div>
-  <div class="services-grid">
-    <div class="service-card">
-      <div class="service-icon">🦴</div>
-      <h3>Orthopaedic Physiotherapy</h3>
-      <p>Treatment for joint pain, fractures, post-surgical recovery, arthritis, and musculoskeletal conditions.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">🧠</div>
-      <h3>Neurological Rehabilitation</h3>
-      <p>Specialised therapy for stroke, Parkinson's disease, nerve injuries, and neurological disorders.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">🏃</div>
-      <h3>Sports Injury Rehabilitation</h3>
-      <p>Get athletes and active individuals back to peak performance after sprains, tears, and sports injuries.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">🧘</div>
-      <h3>Posture & Chronic Pain</h3>
-      <p>Assessment and correction of postural imbalances, back pain, neck pain, and chronic discomfort.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">👴</div>
-      <h3>Geriatric Physiotherapy</h3>
-      <p>Gentle, effective care for elderly patients — improving mobility, balance, and quality of life.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">🤰</div>
-      <h3>Women's Health Physio</h3>
-      <p>Pre- and post-natal care, pelvic floor therapy, and support through every stage of womanhood.</p>
-    </div>
+  <div class="svc-grid" id="svcGrid">
+    <div class="svc-card"><div class="svc-num">01</div><div class="svc-icon">🦴</div><h3>Orthopaedic Physiotherapy</h3><p>Joint pain, fractures, post-surgical recovery, arthritis and musculoskeletal conditions.</p></div>
+    <div class="svc-card"><div class="svc-num">02</div><div class="svc-icon">🧠</div><h3>Neurological Rehabilitation</h3><p>Stroke, Parkinson's disease, nerve injuries and neurological disorders.</p></div>
+    <div class="svc-card"><div class="svc-num">03</div><div class="svc-icon">🏃</div><h3>Sports Injury Rehabilitation</h3><p>Back to peak performance after sprains, tears and sports injuries.</p></div>
+    <div class="svc-card"><div class="svc-num">04</div><div class="svc-icon">🧘</div><h3>Posture & Chronic Pain</h3><p>Postural imbalances, back pain, neck pain and chronic discomfort.</p></div>
+    <div class="svc-card"><div class="svc-num">05</div><div class="svc-icon">👴</div><h3>Geriatric Physiotherapy</h3><p>Gentle care for elderly patients — improving mobility, balance and quality of life.</p></div>
+    <div class="svc-card"><div class="svc-num">06</div><div class="svc-icon">🤰</div><h3>Women's Health Physio</h3><p>Pre- and post-natal care, pelvic floor therapy and women's wellness.</p></div>
   </div>
 </section>
 
-<!-- TEAM -->
+<!-- ── TEAM ───────────────────────────────────── -->
 <section id="team">
-  <div class="section-header center">
-    <div class="section-label">Meet the Team</div>
-    <h2 class="section-title">Our Expert Physiotherapists</h2>
-    <p class="section-sub">Qualified, caring professionals committed to your recovery and well-being.</p>
+  <div class="s-head center">
+    <div class="s-label reveal">Meet the Team</div>
+    <h2 class="s-title reveal d1">Our Expert Physiotherapists</h2>
+    <p class="s-sub reveal d2">Qualified, caring professionals committed to your recovery.</p>
   </div>
-  <div class="team-grid" style="grid-template-columns:repeat(1,1fr);max-width:400px;margin:0 auto;">
+  <div class="team-wrap">
     <div class="team-card">
       <div class="team-avatar">👩‍⚕️</div>
       <div class="team-info">
@@ -533,231 +736,153 @@
   </div>
 </section>
 
-<!-- APPOINTMENTS -->
+<!-- ── APPOINTMENTS ───────────────────────────── -->
 <section id="appointments">
   <div class="appt-grid">
-    <div class="appt-info">
-      <div class="section-label">Book a Visit</div>
-      <h2 class="section-title" style="color:#fff;">Schedule Your Appointment</h2>
-      <p class="section-sub">Fill in your details and we will confirm your slot. Walk-ins also welcome during clinic hours.</p>
-      <br/>
-      <h3>Clinic Hours</h3>
-      <ul class="appt-hours" style="margin-top:14px;">
+    <div>
+      <div class="s-label reveal">Book a Visit</div>
+      <h2 class="s-title white reveal d1">Schedule Your<br/>Appointment</h2>
+      <p class="s-sub white reveal d2">Fill in your details and we will confirm your slot. Walk-ins also welcome during clinic hours.</p>
+      <br/><br/>
+      <div class="appt-info-box reveal d3">
+        <p>Call us directly</p>
+        <div class="appt-phone">+91 98944 07934</div>
+        <div class="appt-phone-sub">Available during clinic hours</div>
+      </div>
+      <ul class="appt-hours reveal d4">
         <li><span class="day">Monday – Friday</span><span class="time">8:00 AM – 7:00 PM</span></li>
         <li><span class="day">Saturday</span><span class="time">9:00 AM – 5:00 PM</span></li>
         <li><span class="day">Sunday</span><span class="time">Closed</span></li>
       </ul>
-      <div style="background:rgba(255,255,255,0.06);border-radius:12px;padding:20px;margin-top:8px;">
-        <p style="font-size:14px;color:rgba(255,255,255,0.7);margin-bottom:8px;">📞 Call us directly</p>
-        <p style="font-size:22px;font-weight:600;color:#fff;">+91 98944 07934</p>
-        <p style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:4px;">Available during clinic hours</p>
-      </div>
     </div>
-    <div class="appt-form">
-      <h3 style="color:#fff;font-family:'Playfair Display',serif;font-size:22px;margin-bottom:24px;">Book an Appointment</h3>
-      <div class="form-group">
-        <label>Full Name *</label>
-        <input type="text" id="appt-name" placeholder="Your full name"/>
+    <div class="appt-form reveal d2">
+      <div class="appt-form-title">Book an Appointment</div>
+      <div class="form-group"><label>Full Name *</label><input type="text" id="appt-name" placeholder="Your full name"/></div>
+      <div class="form-row">
+        <div class="form-group"><label>Phone *</label><input type="tel" id="appt-phone" placeholder="+91 XXXXX XXXXX"/></div>
+        <div class="form-group"><label>Email</label><input type="email" id="appt-email" placeholder="your@email.com"/></div>
       </div>
       <div class="form-row">
-        <div class="form-group">
-          <label>Phone Number *</label>
-          <input type="tel" id="appt-phone" placeholder="+91 XXXXX XXXXX"/>
-        </div>
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" id="appt-email" placeholder="your@email.com"/>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Preferred Date *</label>
-          <input type="date" id="appt-date"/>
-        </div>
-        <div class="form-group">
-          <label>Preferred Time *</label>
+        <div class="form-group"><label>Date *</label><input type="date" id="appt-date"/></div>
+        <div class="form-group"><label>Time *</label>
           <select id="appt-time">
             <option value="">Select time</option>
             <option>8:00 AM</option><option>9:00 AM</option><option>10:00 AM</option>
             <option>11:00 AM</option><option>12:00 PM</option><option>2:00 PM</option>
-            <option>3:00 PM</option><option>4:00 PM</option><option>5:00 PM</option>
-            <option>6:00 PM</option>
+            <option>3:00 PM</option><option>4:00 PM</option><option>5:00 PM</option><option>6:00 PM</option>
           </select>
         </div>
       </div>
-      <div class="form-group">
-        <label>Service Required</label>
+      <div class="form-group"><label>Service</label>
         <select id="appt-service">
           <option value="">Select a service</option>
-          <option>Orthopaedic Physiotherapy</option>
-          <option>Neurological Rehabilitation</option>
-          <option>Sports Injury Rehabilitation</option>
-          <option>Posture & Chronic Pain</option>
-          <option>Geriatric Physiotherapy</option>
-          <option>Women's Health Physio</option>
-          <option>General Consultation</option>
+          <option>Orthopaedic Physiotherapy</option><option>Neurological Rehabilitation</option>
+          <option>Sports Injury Rehabilitation</option><option>Posture & Chronic Pain</option>
+          <option>Geriatric Physiotherapy</option><option>Women's Health Physio</option><option>General Consultation</option>
         </select>
       </div>
-      <div class="form-group">
-        <label>Briefly describe your condition</label>
-        <textarea id="appt-msg" rows="3" placeholder="e.g. knee pain after running, back pain for 3 months..."></textarea>
-      </div>
+      <div class="form-group"><label>Describe your condition</label><textarea id="appt-msg" rows="3" placeholder="e.g. knee pain after running…"></textarea></div>
       <button class="btn-submit" onclick="submitAppointment()">Confirm Appointment</button>
-      <div class="success-msg" id="appt-success">✅ Thank you! We will call you within 2 hours to confirm your slot.</div>
+      <div class="success-msg" id="appt-success">✅ Thank you! We'll call you within 2 hours to confirm your slot.</div>
     </div>
   </div>
 </section>
 
-<!-- CAREERS -->
+<!-- ── CAREERS ────────────────────────────────── -->
 <section id="careers">
-  <div class="section-header center">
-    <div class="section-label">Join Our Team</div>
-    <h2 class="section-title">Current Vacancies</h2>
-    <p class="section-sub">We are growing and looking for passionate healthcare professionals to join The Movement Clinic family.</p>
+  <div class="s-head center">
+    <div class="s-label reveal">Join Our Team</div>
+    <h2 class="s-title reveal d1">Current Vacancies</h2>
+    <p class="s-sub reveal d2">Growing and looking for passionate healthcare professionals.</p>
   </div>
-  <div class="careers-grid" style="grid-template-columns:1fr;max-width:680px;margin:0 auto 56px;">
-    <div class="job-card">
-      <div class="job-tag">Full-Time · Now Hiring</div>
-      <h3>Clinical Physiotherapist</h3>
-      <p>We are looking for a qualified and passionate Clinical Physiotherapist to join our growing team at The Movement Clinic, Salem. You will work closely with Dr. Vinothini K to deliver high-quality, patient-centred physiotherapy care across a range of conditions.</p>
-      <p style="margin-top:10px;"><strong style="color:var(--dark);">Key responsibilities:</strong> Assess and treat patients, develop individualised treatment plans, maintain patient records, and contribute to the clinic's mission of empowering people through movement.</p>
-      <div class="job-meta" style="margin-top:16px;">
-        <span>📍 Salem, Tamil Nadu</span>
-        <span>🎓 BPT Required</span>
-        <span>💰 Salary based on skill & experience</span>
-        <span>✅ Freshers may apply</span>
-      </div>
+  <div class="job-card">
+    <div class="job-tag">Full-Time · Now Hiring</div>
+    <h3>Clinical Physiotherapist</h3>
+    <p>Looking for a qualified and passionate Clinical Physiotherapist to join our team. You will work closely with Dr. Vinothini K to deliver high-quality, patient-centred physiotherapy care.</p>
+    <p><strong style="color:var(--text);font-weight:500;">Key responsibilities:</strong> Assess and treat patients, develop individualised treatment plans, maintain patient records, and contribute to the clinic's mission.</p>
+    <div class="job-meta">
+      <span>📍 Salem, Tamil Nadu</span>
+      <span>🎓 BPT Required</span>
+      <span>💰 Based on skill & experience</span>
+      <span>✅ Freshers may apply</span>
     </div>
   </div>
-
-  <!-- Apply Form -->
-  <div class="apply-section">
+  <div class="apply-box reveal d2">
     <h3>Apply Now</h3>
-    <p>Fill in your details below and we will get back to you within 3 working days.</p>
+    <p>Fill in your details and we'll get back within 3 working days.</p>
     <div class="apply-form">
       <div class="form-row">
-        <div class="form-group">
-          <label>Full Name *</label>
-          <input type="text" id="apply-name" placeholder="Your full name"/>
-        </div>
-        <div class="form-group">
-          <label>Phone Number *</label>
-          <input type="tel" id="apply-phone" placeholder="+91 XXXXX XXXXX"/>
+        <div class="form-group"><label>Full Name *</label><input type="text" id="apply-name" placeholder="Your full name"/></div>
+        <div class="form-group"><label>Phone *</label><input type="tel" id="apply-phone" placeholder="+91 XXXXX XXXXX"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Email *</label><input type="email" id="apply-email" placeholder="your@email.com"/></div>
+        <div class="form-group"><label>Position *</label>
+          <select id="apply-role"><option value="">Select a position</option><option>Clinical Physiotherapist (BPT)</option></select>
         </div>
       </div>
       <div class="form-row">
-        <div class="form-group">
-          <label>Email Address *</label>
-          <input type="email" id="apply-email" placeholder="your@email.com"/>
-        </div>
-        <div class="form-group">
-          <label>Position Applying For *</label>
-          <select id="apply-role">
-            <option value="">Select a position</option>
-            <option>Clinical Physiotherapist (BPT)</option>
-          </select>
+        <div class="form-group"><label>Qualification</label><input type="text" id="apply-qual" placeholder="e.g. BPT…"/></div>
+        <div class="form-group"><label>Experience</label>
+          <select id="apply-exp"><option value="">Select</option><option>Fresher</option><option>Less than 1 year</option><option>1–3 years</option><option>3–5 years</option><option>5+ years</option></select>
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Qualification</label>
-          <input type="text" id="apply-qual" placeholder="e.g. BPT, 12th pass..."/>
-        </div>
-        <div class="form-group">
-          <label>Years of Experience</label>
-          <select id="apply-exp">
-            <option value="">Select</option>
-            <option>Fresher</option>
-            <option>Less than 1 year</option>
-            <option>1–3 years</option>
-            <option>3–5 years</option>
-            <option>5+ years</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Why do you want to join us?</label>
-        <textarea id="apply-msg" rows="3" placeholder="Tell us a little about yourself and your motivation..."></textarea>
-      </div>
+      <div class="form-group"><label>Why do you want to join us?</label><textarea id="apply-msg" rows="3" placeholder="Tell us about yourself…"></textarea></div>
       <button class="btn-submit" onclick="submitApplication()">Submit Application</button>
-      <div class="apply-success" id="apply-success">✅ Application received! We will review and contact you within 3 working days.</div>
+      <div class="apply-success" id="apply-success">✅ Application received! We'll contact you within 3 working days.</div>
     </div>
   </div>
 </section>
 
-<!-- CONTACT -->
+<!-- ── CONTACT ────────────────────────────────── -->
 <section id="contact">
-  <div class="section-header">
-    <div class="section-label">Find Us</div>
-    <h2 class="section-title">Contact & Location</h2>
-    <p class="section-sub">We'd love to hear from you. Visit us or get in touch below.</p>
+  <div class="s-head">
+    <div class="s-label reveal">Find Us</div>
+    <h2 class="s-title reveal d1">Contact & Location</h2>
+    <p class="s-sub reveal d2">We'd love to hear from you.</p>
   </div>
   <div class="contact-grid">
-    <div class="contact-info">
-      <h3>Get In Touch</h3>
-      <div class="contact-item">
-        <div class="contact-item-icon">📍</div>
-        <div class="contact-item-text">
-          <strong>Address</strong>
-          <span>Near Megawin Switch Gear Company &<br/>Game Changers Turf, Salem,<br/>Tamil Nadu, India</span>
-        </div>
-      </div>
-      <div class="contact-item">
-        <div class="contact-item-icon">📞</div>
-        <div class="contact-item-text">
-          <strong>Phone</strong>
-          <span>+91 98944 07934</span>
-        </div>
-      </div>
-      <div class="contact-item">
-        <div class="contact-item-icon">✉️</div>
-        <div class="contact-item-text">
-          <strong>Email</strong>
-          <span>infothemovementclinc@gmail.com</span>
-        </div>
-      </div>
-      <div class="contact-item">
-        <div class="contact-item-icon">🕐</div>
-        <div class="contact-item-text">
-          <strong>Working Hours</strong>
-          <span>Mon–Fri: 8:00 AM – 7:00 PM<br/>Saturday: 9:00 AM – 5:00 PM<br/>Sunday: Closed</span>
-        </div>
-      </div>
+    <div class="reveal">
+      <div class="contact-info"><h3>Get In Touch</h3></div>
+      <div class="c-item"><div class="c-icon">📍</div><div><strong>Address</strong><span>Near Megawin Switch Gear Company &<br/>Game Changers Turf, Salem, Tamil Nadu</span></div></div>
+      <div class="c-item"><div class="c-icon">📞</div><div><strong>Phone</strong><span>+91 98944 07934</span></div></div>
+      <div class="c-item"><div class="c-icon">✉️</div><div><strong>Email</strong><span>infothemovementclinc@gmail.com</span></div></div>
+      <div class="c-item"><div class="c-icon">🕐</div><div><strong>Hours</strong><span>Mon–Fri: 8 AM – 7 PM · Sat: 9 AM – 5 PM · Sun: Closed</span></div></div>
     </div>
-    <div class="map-wrapper">
-      <div class="map-placeholder-icon">📍</div>
-      <div class="map-placeholder-text">The Movement Clinic, Salem</div>
-      <div class="map-placeholder-sub">Near Megawin Switch Gear Co. & Game Changers Turf</div>
-      <a href="https://share.google/M9ZKse7lQrMNZtQUR" target="_blank" class="map-link">📍 Open in Google Maps</a>
+    <div class="map-box reveal d2">
+      <div class="map-box-icon">📍</div>
+      <div class="map-box-name">The Movement Clinic, Salem</div>
+      <div class="map-box-sub">Near Megawin Switch Gear Co. & Game Changers Turf</div>
+      <a href="https://share.google/M9ZKse7lQrMNZtQUR" target="_blank" class="map-link">Open in Google Maps →</a>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
+<!-- ── FOOTER ─────────────────────────────────── -->
 <footer>
-  <div class="footer-grid">
-    <div class="footer-brand">
-      <div class="logo">
-        <div class="logo-icon">🏃</div>
+  <div class="foot-grid">
+    <div class="foot-brand">
+      <a href="#home" class="logo">
+        <div class="logo-mark">🏃</div>
         <div>
-          <div class="logo-text">The Movement Clinic</div>
-          <div class="logo-sub" style="color:rgba(255,255,255,0.4);">Salem, Tamil Nadu</div>
+          <div class="logo-name-dark">The Movement Clinic</div>
+          <div class="logo-sub-dark">Salem, Tamil Nadu</div>
         </div>
-      </div>
+      </a>
       <p>Empowering individuals through movement and personalised physiotherapy care. Your recovery is our mission.</p>
     </div>
-    <div class="footer-col">
+    <div class="foot-col">
       <h4>Quick Links</h4>
       <ul>
         <li><a href="#about">About Us</a></li>
-        <li><a href="#services">Our Services</a></li>
+        <li><a href="#services">Services</a></li>
         <li><a href="#team">Our Team</a></li>
         <li><a href="#appointments">Book Appointment</a></li>
         <li><a href="#careers">Careers</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
     </div>
-    <div class="footer-col">
+    <div class="foot-col">
       <h4>Services</h4>
       <ul>
         <li><a href="#services">Orthopaedic Physio</a></li>
@@ -769,123 +894,217 @@
       </ul>
     </div>
   </div>
-  <div class="footer-bottom">
+  <div class="foot-bottom">
     <p>© 2025 The Movement Clinic, Salem. All rights reserved.</p>
     <p>Made with ❤️ for better health in Salem</p>
   </div>
 </footer>
 
 <script>
-  const API_URL = "https://clinic-backend-wg1k.onrender.com";
+/* ── BACKEND (unchanged) ────────────────────── */
+const API_URL = "https://clinic-backend-wg1k.onrender.com";
 
-  function toggleMenu() {
-    const links = document.querySelector('.nav-links');
-    if (links.style.display === 'flex') {
-      links.style.display = 'none';
-    } else {
-      links.style.cssText =
-        'display:flex;flex-direction:column;position:absolute;top:68px;left:0;right:0;background:var(--cream);padding:20px 5%;border-bottom:1px solid var(--green-mid);gap:18px;';
-    }
+function submitApplication() {
+  const name         = document.getElementById('apply-name').value.trim();
+  const phone        = document.getElementById('apply-phone').value.trim();
+  const email        = document.getElementById('apply-email').value.trim();
+  const position     = document.getElementById('apply-role').value;
+  const experience   = document.getElementById('apply-exp').value;
+  const qualification= document.getElementById('apply-qual').value.trim(); // ✅ NEW
+  const message      = document.getElementById('apply-msg').value.trim();   // ✅ NEW
+
+  if (!name || !phone || !email || !position) {
+    alert('Please fill all required fields');
+    return;
   }
 
-  // ✅ APPOINTMENT
-  function submitAppointment() {
-    const name = document.getElementById('appt-name').value.trim();
-    const phone = document.getElementById('appt-phone').value.trim();
-    const date = document.getElementById('appt-date').value;
-    const time = document.getElementById('appt-time').value;
-    const service = document.getElementById('appt-service').value;
-    const message = document.getElementById('appt-msg').value.trim();
-
-    if (!name || !phone || !date || !time) {
-      alert('Please fill all required fields');
-      return;
-    }
-
-    fetch(`${API_URL}/book`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ name, phone, date, time, service, message })
+  fetch(`${API_URL}/apply`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name,
+      phone,
+      email,
+      position,
+      experience,
+      qualification, // ✅ FIXED
+      message        // ✅ FIXED
     })
-    .then(res => res.text())
-    .then(data => {
-      alert(data);
-      document.getElementById('appt-success').style.display = 'block';
+  })
+  .then(r => r.json()) // ✅ FIXED UX
+  .then(d => {
+    alert(d.message); // ✅ FIXED UX
+    document.getElementById('apply-success').style.display = 'block';
 
-      document.getElementById('appt-name').value = '';
-      document.getElementById('appt-phone').value = '';
-      document.getElementById('appt-date').value = '';
-      document.getElementById('appt-time').value = '';
-      document.getElementById('appt-service').value = '';
-      document.getElementById('appt-msg').value = '';
-    })
-    .catch(err => {
-      alert("Server error ❌");
-      console.log(err);
-    });
+    ['apply-name','apply-phone','apply-email','apply-role','apply-exp','apply-qual','apply-msg']
+      .forEach(id => document.getElementById(id).value = '');
+  })
+  .catch(e => {
+    alert("Server error ❌");
+    console.log(e);
+  });
+}
+
+function submitAppointment() {
+  const name    = document.getElementById('appt-name').value.trim();
+  const phone   = document.getElementById('appt-phone').value.trim();
+  const email   = document.getElementById('appt-email').value.trim(); // ✅ FIXED
+  const date    = document.getElementById('appt-date').value;
+  const time    = document.getElementById('appt-time').value;
+  const service = document.getElementById('appt-service').value;
+  const message = document.getElementById('appt-msg').value.trim();
+
+  if (!name || !phone || !email || !date || !time) {
+    alert('Please fill all required fields');
+    return;
   }
 
-  // ✅ JOB APPLICATION
-  function submitApplication() {
-    const name = document.getElementById('apply-name').value.trim();
-    const phone = document.getElementById('apply-phone').value.trim();
-    const email = document.getElementById('apply-email').value.trim();
-    const position = document.getElementById('apply-role').value;
-    const experience = document.getElementById('apply-exp').value;
-
-    if (!name || !phone || !email || !position) {
-      alert('Please fill all required fields');
-      return;
-    }
-
-    fetch(`${API_URL}/apply`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ name, phone, email, position, experience })
+  fetch(`${API_URL}/book`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name,
+      phone,
+      email,   // ✅ FIXED
+      date,
+      time,
+      service,
+      message
     })
-    .then(res => res.text())
-    .then(data => {
-      alert(data);
-      document.getElementById('apply-success').style.display = 'block';
+  })
+  .then(r => r.json()) // ✅ FIXED UX
+  .then(d => {
+    alert(d.message); // ✅ FIXED UX
+    document.getElementById('appt-success').style.display = 'block';
 
-      document.getElementById('apply-name').value = '';
-      document.getElementById('apply-phone').value = '';
-      document.getElementById('apply-email').value = '';
-      document.getElementById('apply-role').value = '';
-      document.getElementById('apply-exp').value = '';
-    })
-    .catch(err => {
-      alert("Server error ❌");
-      console.log(err);
-    });
+    ['appt-name','appt-phone','appt-email','appt-date','appt-time','appt-service','appt-msg']
+      .forEach(id => document.getElementById(id).value = '');
+  })
+  .catch(e => {
+    alert("Server error ❌");
+    console.log(e);
+  });
+}
+
+/* ── INTRO ──────────────────────────────────── */
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('intro').classList.add('gone');
+  }, 2600);
+  const today = new Date().toISOString().split('T')[0];
+  const d = document.getElementById('appt-date');
+  if (d) d.setAttribute('min', today);
+});
+
+/* ── HERO SCROLL PARALLAX ───────────────────── */
+const heroTitle  = document.getElementById('heroTitle');
+const heroAnchor = document.getElementById('hero-anchor');
+
+function updateHeroParallax() {
+  const scrollY = window.scrollY;
+  const heroH   = heroAnchor.offsetHeight;
+  // progress 0→1 over first heroH px
+  const p = Math.min(scrollY / heroH, 1);
+
+  if (heroTitle) {
+    const translateY = p * 120;      // drifts down
+    const opacity    = 1 - p * 1.8; // fades out faster
+    const scale      = 1 - p * 0.06;
+    heroTitle.style.transform = `translateY(${translateY}px) scale(${scale})`;
+    heroTitle.style.opacity   = Math.max(opacity, 0);
   }
+}
 
-  window.onload = function () {
-    const today = new Date().toISOString().split('T')[0];
-    const dateInput = document.getElementById('appt-date');
+window.addEventListener('scroll', updateHeroParallax, { passive: true });
 
-    if (dateInput) {
-      dateInput.setAttribute('min', today);
+/* ── NAV STYLE ON SCROLL ────────────────────── */
+const nav    = document.getElementById('nav');
+const logoN  = document.getElementById('logoName');
+const logoS  = document.getElementById('logoSub');
+
+function updateNav() {
+  const scrollY   = window.scrollY;
+  const heroH     = heroAnchor.offsetHeight;
+  const pastHero  = scrollY > heroH - 80;
+
+  if (pastHero) {
+    nav.classList.remove('dark');
+    nav.classList.add('light');
+    if (logoN) { logoN.className = 'logo-name-light'; }
+    if (logoS) { logoS.className = 'logo-sub-light'; }
+  } else {
+    nav.classList.remove('light');
+    nav.classList.add('dark');
+    if (logoN) { logoN.className = 'logo-name-dark'; }
+    if (logoS) { logoS.className = 'logo-sub-dark'; }
+  }
+}
+window.addEventListener('scroll', updateNav, { passive: true });
+
+/* ── HAMBURGER ──────────────────────────────── */
+function toggleMenu() {
+  const links = document.getElementById('navLinks');
+  const open  = links.style.display === 'flex';
+  links.style.cssText = open ? '' :
+    'display:flex;flex-direction:column;position:absolute;top:62px;left:0;right:0;' +
+    'background:rgba(10,31,20,0.97);padding:20px 5%;border-bottom:1px solid rgba(62,166,102,0.12);' +
+    'gap:18px;backdrop-filter:blur(12px);z-index:399;';
+}
+
+/* ── REVEAL ON SCROLL ───────────────────────── */
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add('visible'); ro.unobserve(e.target); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+/* service cards stagger */
+const so = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.svc-card').forEach((c,i) => setTimeout(()=>c.classList.add('visible'), i*80));
+      so.unobserve(e.target);
     }
+  });
+}, { threshold: 0.08 });
+const sg = document.getElementById('svcGrid');
+if (sg) so.observe(sg);
 
-    // 🔥 animation logic INSIDE onload
-    const elements = document.querySelectorAll('.service-card, .team-card, .job-card');
+/* team & job cards */
+const co = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); co.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.team-card,.job-card').forEach(el => co.observe(el));
 
-    window.addEventListener('scroll', () => {
-      elements.forEach(el => {
-        const pos = el.getBoundingClientRect().top;
+/* ── CUSTOM CURSOR ──────────────────────────── */
+const dot  = document.getElementById('cur-dot');
+const ring = document.getElementById('cur-ring');
+let mx=0,my=0, dx=0,dy=0, rx=0,ry=0;
 
-        if (pos < window.innerHeight - 100) {
-          el.style.opacity = 1;
-          el.style.transform = "translateY(0)";
-        }
-      });
-    });
-  };
+document.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY; });
+
+(function animCursor(){
+  dx += (mx-dx)*.4;
+  dy += (my-dy)*.4;
+  rx += (mx-rx)*.12;
+  ry += (my-ry)*.12;
+  if(dot)  { dot.style.left=dx+'px';  dot.style.top=dy+'px';  }
+  if(ring) { ring.style.left=rx+'px'; ring.style.top=ry+'px'; }
+  requestAnimationFrame(animCursor);
+})();
+
+document.querySelectorAll('a,button,.svc-card,.feat-item,.c-item,.team-card,.job-card')
+  .forEach(el=>{
+    el.addEventListener('mouseenter',()=>ring&&ring.classList.add('big'));
+    el.addEventListener('mouseleave',()=>ring&&ring.classList.remove('big'));
+  });
+
+/* ── HERO MOUSE PARALLAX ────────────────────── */
+const mesh = document.querySelector('.hero-mesh');
+document.addEventListener('mousemove', e => {
+  const x = (e.clientX/window.innerWidth  - .5)*18;
+  const y = (e.clientY/window.innerHeight - .5)*14;
+  if (mesh) mesh.style.transform = `translate(${x*.4}px,${y*.4}px)`;
+});
 </script>
 </body>
 </html>

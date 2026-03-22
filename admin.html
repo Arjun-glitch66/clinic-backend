@@ -19,7 +19,6 @@
             margin-bottom: 20px;
         }
 
-        /* Card */
         .dashboard {
             background: white;
             border-radius: 16px;
@@ -29,14 +28,8 @@
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         table {
@@ -57,10 +50,6 @@
             border-top: 1px solid #eee;
         }
 
-        tr {
-            transition: 0.2s;
-        }
-
         tr:hover {
             background: #f9fbff;
         }
@@ -72,7 +61,6 @@
             border-radius: 8px;
             color: white;
             cursor: pointer;
-            transition: 0.2s;
         }
 
         button:hover {
@@ -106,6 +94,7 @@
             <th>ID</th>
             <th>Name</th>
             <th>Phone</th>
+            <th>Email</th> <!-- ✅ NEW -->
             <th>Date</th>
             <th>Time</th>
             <th>Service</th>
@@ -118,6 +107,7 @@
 <script>
 
 const API_URL = "https://clinic-backend-wg1k.onrender.com";
+const ADMIN_KEY = "admin123"; // ✅ must match backend
 
 // 🔐 Password
 const password = prompt("Enter Admin Password:");
@@ -142,6 +132,7 @@ function loadAppointments() {
             <th>ID</th>
             <th>Name</th>
             <th>Phone</th>
+            <th>Email</th>
             <th>Date</th>
             <th>Time</th>
             <th>Service</th>
@@ -156,6 +147,7 @@ function loadAppointments() {
                 <td><strong>#${row.id}</strong></td>
                 <td>${row.name}</td>
                 <td>${row.phone}</td>
+                <td>${row.email || "-"}</td> <!-- ✅ NEW -->
                 <td>${row.date}</td>
                 <td>${row.time}</td>
                 <td><span class="badge">${row.service || "General"}</span></td>
@@ -176,12 +168,15 @@ function loadAppointments() {
     });
 }
 
-// ❌ Delete
+// ❌ Delete (UPDATED 🔥)
 function deleteRow(id) {
     if(!confirm("Delete this appointment?")) return;
 
     fetch(`${API_URL}/delete/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
+        headers: {
+            "x-admin-key": ADMIN_KEY // ✅ IMPORTANT FIX
+        }
     })
     .then(res => res.text())
     .then(msg => {

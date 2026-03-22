@@ -1,4 +1,6 @@
 const express = require("express");
+const multer = require("multer");
+const path = require("path");
 const mysql = require("mysql2");
 const cors = require("cors");
 const axios = require("axios");
@@ -14,6 +16,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use("/uploads", express.static("uploads"));
 
 // ✅ MySQL Pool
 const db = mysql.createPool({
@@ -40,7 +43,16 @@ db.getConnection((err, connection) => {
 app.get("/", (req, res) => {
     res.send("Server running ✅");
 });
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "uploads/");
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
 
+const upload = multer({ storage });
 // =========================
 // 📥 GET APPOINTMENTS
 // =========================
@@ -104,7 +116,8 @@ Message: ${message}`
 // =========================
 // 🧑‍⚕️ APPLY JOB
 // =========================
-app.post("/apply", (req, res) => {
+app.post("/apply", upload.single("resume"), (req, res) => {
+    const resume = req.file ? req.file.filename : null;
     const { name, phone, email, position, experience, qualification, message } = req.body;
 
     if (!name?.trim() || !phone?.trim() || !email?.trim() || !position) {
@@ -113,11 +126,11 @@ app.post("/apply", (req, res) => {
 
     const sql = `
         INSERT INTO applications 
-        (name, phone, email, position, experience, qualification, message)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        (name, phone, email, position, experience, qualification, message,resume)
+        VALUES (?, ?, ?, ?, ?, ?, ?,?)
     `;
 
-    db.query(sql, [name, phone, email, position, experience, qualification, message], (err) => {
+    db.query(sql, [name, phone, email, position, experience, qualification, message,resume], (err) => {
         if (err) {
             console.log(err);
             return res.status(500).json({ success: false });

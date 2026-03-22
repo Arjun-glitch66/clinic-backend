@@ -67,14 +67,6 @@
             background: #e63946;
         }
 
-        .badge {
-            background: #e8f5ef;
-            color: #1a6b4a;
-            padding: 5px 10px;
-            border-radius: 999px;
-            font-size: 12px;
-        }
-
         .loading {
             margin: 20px 0;
             color: #666;
@@ -97,8 +89,9 @@
             <th>Phone</th>
             <th>Position</th>
             <th>Experience</th>
-            <th>Qualification</th> <!-- NEW -->
-            <th>Message</th> <!-- NEW -->
+            <th>Qualification</th>
+            <th>Message</th>
+            <th>Resume</th>
             <th>Action</th>
         </tr>
     </table>
@@ -107,9 +100,9 @@
 <script>
 
 const API_URL = "https://clinic-backend-wg1k.onrender.com";
-const ADMIN_KEY = "admin123"; // must match backend
+const ADMIN_KEY = "admin123";
 
-// 🔐 Password
+// 🔐 Password protection
 const password = prompt("Enter Admin Password:");
 if(password !== "admin123"){
     alert("Access Denied");
@@ -137,6 +130,7 @@ function loadApplications() {
             <th>Experience</th>
             <th>Qualification</th>
             <th>Message</th>
+            <th>Resume</th>
             <th>Action</th>
         </tr>`;
 
@@ -152,6 +146,14 @@ function loadApplications() {
                 <td>${row.experience || "-"}</td>
                 <td>${row.qualification || "-"}</td>
                 <td>${row.message || "-"}</td>
+
+                <td>
+                    ${row.resume 
+                        ? `<a href="${API_URL}/uploads/${row.resume}" target="_blank">View</a>` 
+                        : "-"
+                    }
+                </td>
+
                 <td><button onclick="deleteRow(${row.id})">Delete</button></td>
             `;
 
@@ -168,7 +170,7 @@ function loadApplications() {
     });
 }
 
-// ❌ Delete (UPDATED 🔥)
+// ❌ Delete
 function deleteRow(id) {
     if(!confirm("Delete this application?")) return;
 

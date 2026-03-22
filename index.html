@@ -617,6 +617,53 @@ footer { background:var(--g1); padding:64px 5% 36px; }
   .apply-box { padding:28px 20px; }
   .hero-main-text { font-size:clamp(46px,12vw,70px); }
 }
+/* Top buttons container */
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Apply Job button style */
+.secondary-btn {
+  background: transparent;
+  border: 1px solid var(--g-accent);
+  color: var(--g-accent);
+}
+
+/* Hover effect */
+.secondary-btn:hover {
+  background: var(--g-accent);
+  color: white;
+}
+/* 📱 MOBILE FIX */
+@media (max-width: 768px) {
+
+  /* Fix nav padding */
+  nav {
+    padding: 0 16px;
+  }
+
+  /* Buttons container spacing */
+  .nav-buttons {
+    gap: 6px;
+  }
+
+  /* Button size fix */
+  .nav-cta {
+    padding: 8px 12px;
+    font-size: 12px;
+    border-radius: 6px;
+  }
+
+  /* Scroll text fix */
+  .hero-scroll-cue {
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+  }
+
+}
 </style>
 </head>
 <body>
@@ -652,11 +699,14 @@ footer { background:var(--g1); padding:64px 5% 36px; }
   <ul class="nav-links" id="navLinks">
     <li><a href="#about">About</a></li>
     <li><a href="#services">Services</a></li>
-    <li><a href="#team">Our Team</a></li>
+    <li><a href="#team">Our Founder</a></li>
     <li><a href="#careers">Careers</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
+  <div class="nav-buttons">
   <a href="#appointments" class="nav-cta">Book Appointment</a>
+  <a href="#careers" class="nav-cta secondary-btn">Apply Job</a>
+</div>
   <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
 </nav>
 
@@ -720,7 +770,7 @@ footer { background:var(--g1); padding:64px 5% 36px; }
 <!-- ── TEAM ───────────────────────────────────── -->
 <section id="team">
   <div class="s-head center">
-    <div class="s-label reveal">Meet the Team</div>
+    <div class="s-label reveal">Meet the Founder</div>
     <h2 class="s-title reveal d1">Our Expert Physiotherapists</h2>
     <p class="s-sub reveal d2">Qualified, caring professionals committed to your recovery.</p>
   </div>
@@ -728,7 +778,7 @@ footer { background:var(--g1); padding:64px 5% 36px; }
     <div class="team-card">
       <div class="team-avatar">👩‍⚕️</div>
       <div class="team-info">
-        <h3>Dr. Vinothini K</h3>
+        <h3>Dr. Vinodhini K</h3>
         <div class="team-role">Lead Physiotherapist</div>
         <p class="team-bio">BPT — 25 years of dedicated experience in physiotherapy and rehabilitation. Founder and lead clinician of The Movement Clinic, Salem, with a passion for empowering patients through movement and personalised care.</p>
       </div>
@@ -744,46 +794,109 @@ footer { background:var(--g1); padding:64px 5% 36px; }
       <h2 class="s-title white reveal d1">Schedule Your<br/>Appointment</h2>
       <p class="s-sub white reveal d2">Fill in your details and we will confirm your slot. Walk-ins also welcome during clinic hours.</p>
       <br/><br/>
+
       <div class="appt-info-box reveal d3">
         <p>Call us directly</p>
-        <div class="appt-phone">+91 98944 07934</div>
+        <!-- ✅ CLICKABLE PHONE -->
+        <div class="appt-phone">
+          <a href="tel:+919894407934" style="text-decoration:none; color:inherit;">
+            +91 98944 07934
+          </a>
+        </div>
         <div class="appt-phone-sub">Available during clinic hours</div>
       </div>
+
+      <!-- ✅ UPDATED TIMINGS -->
       <ul class="appt-hours reveal d4">
-        <li><span class="day">Monday – Friday</span><span class="time">8:00 AM – 7:00 PM</span></li>
-        <li><span class="day">Saturday</span><span class="time">9:00 AM – 5:00 PM</span></li>
-        <li><span class="day">Sunday</span><span class="time">Closed</span></li>
+        <li>
+          <span class="day">Mon - Sat</span>
+          <span class="time">10:00 AM – 1:00 PM, 4:00 PM – 8:30 PM</span>
+        </li>
+        <li>
+          <span class="day">Sunday</span>
+          <span class="time">10:00 AM – 2:00 PM</span>
+        </li>
       </ul>
     </div>
+
     <div class="appt-form reveal d2">
       <div class="appt-form-title">Book an Appointment</div>
-      <div class="form-group"><label>Full Name *</label><input type="text" id="appt-name" placeholder="Your full name"/></div>
-      <div class="form-row">
-        <div class="form-group"><label>Phone *</label><input type="tel" id="appt-phone" placeholder="+91 XXXXX XXXXX"/></div>
-        <div class="form-group"><label>Email</label><input type="email" id="appt-email" placeholder="your@email.com"/></div>
+
+      <div class="form-group">
+        <label>Full Name *</label>
+        <input type="text" id="appt-name" placeholder="Your full name"/>
       </div>
+
       <div class="form-row">
-        <div class="form-group"><label>Date *</label><input type="date" id="appt-date"/></div>
-        <div class="form-group"><label>Time *</label>
+        <div class="form-group">
+          <label>Phone *</label>
+          <input type="tel" id="appt-phone" placeholder="+91 XXXXX XXXXX"/>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="appt-email" placeholder="your@email.com"/>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Date *</label>
+          <input type="date" id="appt-date"/>
+        </div>
+        <div class="form-group">
+          <label>Time *</label>
           <select id="appt-time">
             <option value="">Select time</option>
-            <option>8:00 AM</option><option>9:00 AM</option><option>10:00 AM</option>
-            <option>11:00 AM</option><option>12:00 PM</option><option>2:00 PM</option>
-            <option>3:00 PM</option><option>4:00 PM</option><option>5:00 PM</option><option>6:00 PM</option>
+            <!-- Morning -->
+  <option>10:00 AM</option>
+  <option>10:30 AM</option>
+  <option>11:00 AM</option>
+  <option>11:30 AM</option>
+  <option>12:00 PM</option>
+  <option>12:30 PM</option>
+
+  <!-- Evening -->
+  <option>4:00 PM</option>
+  <option>4:30 PM</option>
+  <option>5:00 PM</option>
+  <option>5:30 PM</option>
+  <option>6:00 PM</option>
+  <option>6:30 PM</option>
+  <option>7:00 PM</option>
+  <option>7:30 PM</option>
+  <option>8:00 PM</option>
+  <option>8:30 PM</option>
           </select>
         </div>
       </div>
-      <div class="form-group"><label>Service</label>
+
+      <div class="form-group">
+        <label>Service</label>
         <select id="appt-service">
           <option value="">Select a service</option>
-          <option>Orthopaedic Physiotherapy</option><option>Neurological Rehabilitation</option>
-          <option>Sports Injury Rehabilitation</option><option>Posture & Chronic Pain</option>
-          <option>Geriatric Physiotherapy</option><option>Women's Health Physio</option><option>General Consultation</option>
+          <option>Orthopaedic Physiotherapy</option>
+          <option>Neurological Rehabilitation</option>
+          <option>Sports Injury Rehabilitation</option>
+          <option>Posture & Chronic Pain</option>
+          <option>Geriatric Physiotherapy</option>
+          <option>Women's Health Physio</option>
+          <option>General Consultation</option>
         </select>
       </div>
-      <div class="form-group"><label>Describe your condition</label><textarea id="appt-msg" rows="3" placeholder="e.g. knee pain after running…"></textarea></div>
+
+      <div class="form-group">
+        <label>Describe your condition</label>
+        <textarea id="appt-msg" rows="3" placeholder="e.g. knee pain after running…"></textarea>
+      </div>
+
       <button class="btn-submit" onclick="submitAppointment()">Confirm Appointment</button>
-      <div class="success-msg" id="appt-success">✅ Thank you! We'll call you within 2 hours to confirm your slot.</div>
+
+      <div class="success-msg" id="appt-success">
+        ✅ Thank you! We'll call you within 2 hours to confirm your slot.
+      </div>
+      <button id="whatsapp-btn" style="display:none; margin-top:10px;">
+    Send WhatsApp Confirmation
+</button>
     </div>
   </div>
 </section>
@@ -798,7 +911,7 @@ footer { background:var(--g1); padding:64px 5% 36px; }
   <div class="job-card">
     <div class="job-tag">Full-Time · Now Hiring</div>
     <h3>Clinical Physiotherapist</h3>
-    <p>Looking for a qualified and passionate Clinical Physiotherapist to join our team. You will work closely with Dr. Vinothini K to deliver high-quality, patient-centred physiotherapy care.</p>
+    <p>Looking for a qualified and passionate Clinical Physiotherapist to join our team. You will work closely with Dr. Vinodhini K to deliver high-quality, patient-centred physiotherapy care.</p>
     <p><strong style="color:var(--text);font-weight:500;">Key responsibilities:</strong> Assess and treat patients, develop individualised treatment plans, maintain patient records, and contribute to the clinic's mission.</p>
     <div class="job-meta">
       <span>📍 Salem, Tamil Nadu</span>
@@ -828,6 +941,10 @@ footer { background:var(--g1); padding:64px 5% 36px; }
         </div>
       </div>
       <div class="form-group"><label>Why do you want to join us?</label><textarea id="apply-msg" rows="3" placeholder="Tell us about yourself…"></textarea></div>
+      <div class="form-group">
+  <label>Upload Resume (PDF) *</label>
+  <input type="file" id="apply-resume" accept=".pdf"/>
+</div>
       <button class="btn-submit" onclick="submitApplication()">Submit Application</button>
       <div class="apply-success" id="apply-success">✅ Application received! We'll contact you within 3 working days.</div>
     </div>
@@ -841,23 +958,70 @@ footer { background:var(--g1); padding:64px 5% 36px; }
     <h2 class="s-title reveal d1">Contact & Location</h2>
     <p class="s-sub reveal d2">We'd love to hear from you.</p>
   </div>
+
   <div class="contact-grid">
     <div class="reveal">
       <div class="contact-info"><h3>Get In Touch</h3></div>
-      <div class="c-item"><div class="c-icon">📍</div><div><strong>Address</strong><span>Near Megawin Switch Gear Company &<br/>Game Changers Turf, Salem, Tamil Nadu</span></div></div>
-      <div class="c-item"><div class="c-icon">📞</div><div><strong>Phone</strong><span>+91 98944 07934</span></div></div>
-      <div class="c-item"><div class="c-icon">✉️</div><div><strong>Email</strong><span>infothemovementclinc@gmail.com</span></div></div>
-      <div class="c-item"><div class="c-icon">🕐</div><div><strong>Hours</strong><span>Mon–Fri: 8 AM – 7 PM · Sat: 9 AM – 5 PM · Sun: Closed</span></div></div>
+
+      <div class="c-item">
+        <div class="c-icon">📍</div>
+        <div>
+          <strong>Address</strong>
+          <span>
+            Near Megawin Switch Gear Company &<br/>
+            Game Changers Turf, Salem, Tamil Nadu
+          </span>
+        </div>
+      </div>
+
+      <!-- ✅ CLICKABLE PHONE -->
+      <div class="c-item">
+        <div class="c-icon">📞</div>
+        <div>
+          <strong>Phone</strong>
+          <span>
+            <a href="tel:+919894407934" style="text-decoration:none; color:inherit;">
+              +91 98944 07934
+            </a>
+          </span>
+        </div>
+      </div>
+
+      <!-- ✅ CLICKABLE EMAIL (BONUS UX) -->
+      <div class="c-item">
+        <div class="c-icon">✉️</div>
+        <div>
+          <strong>Email</strong>
+          <span>
+            <a href="mailto:infothemovementclinc@gmail.com" style="text-decoration:none; color:inherit;">
+              infothemovementclinc@gmail.com
+            </a>
+          </span>
+        </div>
+      </div>
+
+      <!-- ✅ UPDATED TIMINGS -->
+      <div class="c-item">
+        <div class="c-icon">🕐</div>
+        <div>
+          <strong>Hours</strong>
+          <span>
+            Mon - Sat: 10:00 AM – 1:00 PM, 4:00 PM – 8:30 PM · Sunday: 10:00 AM – 2:00 PM
+          </span>
+        </div>
+      </div>
     </div>
+
     <div class="map-box reveal d2">
       <div class="map-box-icon">📍</div>
       <div class="map-box-name">The Movement Clinic, Salem</div>
       <div class="map-box-sub">Near Megawin Switch Gear Co. & Game Changers Turf</div>
-      <a href="https://share.google/M9ZKse7lQrMNZtQUR" target="_blank" class="map-link">Open in Google Maps →</a>
+      <a href="https://share.google/M9ZKse7lQrMNZtQUR" target="_blank" class="map-link">
+        Open in Google Maps →
+      </a>
     </div>
   </div>
 </section>
-
 <!-- ── FOOTER ─────────────────────────────────── -->
 <footer>
   <div class="foot-grid">
@@ -905,43 +1069,46 @@ footer { background:var(--g1); padding:64px 5% 36px; }
 const API_URL = "https://clinic-backend-wg1k.onrender.com";
 
 function submitApplication() {
-  const name         = document.getElementById('apply-name').value.trim();
-  const phone        = document.getElementById('apply-phone').value.trim();
-  const email        = document.getElementById('apply-email').value.trim();
-  const position     = document.getElementById('apply-role').value;
-  const experience   = document.getElementById('apply-exp').value;
-  const qualification= document.getElementById('apply-qual').value.trim(); // ✅ NEW
-  const message      = document.getElementById('apply-msg').value.trim();   // ✅ NEW
+  const name          = document.getElementById('apply-name').value.trim();
+  const phone         = document.getElementById('apply-phone').value.trim();
+  const email         = document.getElementById('apply-email').value.trim();
+  const position      = document.getElementById('apply-role').value;
+  const experience    = document.getElementById('apply-exp').value;
+  const qualification = document.getElementById('apply-qual').value.trim();
+  const message       = document.getElementById('apply-msg').value.trim();
+  const resume        = document.getElementById('apply-resume').files[0];
 
-  if (!name || !phone || !email || !position) {
-    alert('Please fill all required fields');
+  if (!name || !phone || !email || !position || !resume) {
+    alert('Please fill all required fields and upload resume');
     return;
   }
 
+  // 🔥 FORM DATA (IMPORTANT)
+  const formData = new FormData();
+  formData.append("name", name);
+  formData.append("phone", phone);
+  formData.append("email", email);
+  formData.append("position", position);
+  formData.append("experience", experience);
+  formData.append("qualification", qualification);
+  formData.append("message", message);
+  formData.append("resume", resume);
+
   fetch(`${API_URL}/apply`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      name,
-      phone,
-      email,
-      position,
-      experience,
-      qualification, // ✅ FIXED
-      message        // ✅ FIXED
-    })
+    body: formData
   })
-  .then(r => r.json()) // ✅ FIXED UX
-  .then(d => {
-    alert(d.message); // ✅ FIXED UX
+  .then(res => res.json())
+  .then(data => {
+    alert(data.message);
     document.getElementById('apply-success').style.display = 'block';
 
-    ['apply-name','apply-phone','apply-email','apply-role','apply-exp','apply-qual','apply-msg']
+    ['apply-name','apply-phone','apply-email','apply-role','apply-exp','apply-qual','apply-msg','apply-resume']
       .forEach(id => document.getElementById(id).value = '');
   })
-  .catch(e => {
-    alert("Server error ❌");
-    console.log(e);
+  .catch(err => {
+    console.log(err);
+    alert("Error submitting ❌");
   });
 }
 
@@ -976,6 +1143,26 @@ function submitAppointment() {
   .then(d => {
     alert(d.message); // ✅ FIXED UX
     document.getElementById('appt-success').style.display = 'block';
+    const whatsappBtn = document.getElementById("whatsapp-btn");
+
+// Create message
+const message = `Hi 👋 , I booked an appointment at Movement Clinic Salem
+
+Name: ${name}
+Date: ${date}
+Time: ${time}
+Looking forward to my visit.`;
+
+// Encode message for URL
+const encodedMsg = encodeURIComponent(message);
+
+// Show button
+whatsappBtn.style.display = "block";
+
+// On click → open WhatsApp
+whatsappBtn.onclick = () => {
+  window.open(`https://wa.me/918825955540?text=${encodedMsg}`, "_blank");
+};
 
     ['appt-name','appt-phone','appt-email','appt-date','appt-time','appt-service','appt-msg']
       .forEach(id => document.getElementById(id).value = '');

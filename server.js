@@ -5,6 +5,13 @@ const mysql = require("mysql2");
 const cors = require("cors");
 const axios = require("axios");
 
+const fs = require("fs");
+
+// ensure uploads folder exists
+if (!fs.existsSync("uploads")) {
+  fs.mkdirSync("uploads");
+}
+
 const app = express();
 
 // ✅ CORS (secure)
@@ -52,7 +59,20 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype !== "application/pdf") {
+      return cb(new Error("Only PDF files allowed"));
+    }
+    cb(null, true);
+  },
+
+  limits: {
+    fileSize: 2 * 1024 * 1024 // 2MB
+  }
+});
 // =========================
 // 📥 GET APPOINTMENTS
 // =========================
@@ -116,7 +136,18 @@ Message: ${message}`
 // =========================
 // 🧑‍⚕️ APPLY JOB
 // =========================
-app.post("/apply", upload.single("resume"), (req, res) => {
+app.post("/apply", (req, res) => {
+
+  upload.single("resume")(req, res, (err) => {
+
+    // ❌ Handle file errors (PDF / size)
+    if (err) {
+      return res.status(400).json({
+        success: false,
+        message: err.message
+      });
+    }
+
     const resume = req.file ? req.file.filename : null;
     const { name, phone, email, position, experience, qualification, message } = req.body;
 
@@ -126,11 +157,11 @@ app.post("/apply", upload.single("resume"), (req, res) => {
 
     const sql = `
         INSERT INTO applications 
-        (name, phone, email, position, experience, qualification, message,resume)
-        VALUES (?, ?, ?, ?, ?, ?, ?,?)
+        (name, phone, email, position, experience, qualification, message, resume)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
-    db.query(sql, [name, phone, email, position, experience, qualification, message,resume], (err) => {
+    db.query(sql, [name, phone, email, position, experience, qualification, message, resume], (err) => {
         if (err) {
             console.log(err);
             return res.status(500).json({ success: false });
@@ -158,6 +189,9 @@ Message: ${message}`
 
         res.json({ success: true, message: "Application submitted ✅" });
     });
+
+  });
+
 });
 
 // =========================

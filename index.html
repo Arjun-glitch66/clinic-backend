@@ -639,28 +639,29 @@ footer { background:var(--g1); padding:64px 5% 36px; }
 /* 📱 MOBILE FIX */
 @media (max-width: 768px) {
 
-  /* Fix nav padding */
+  /* NAV BAR FIX */
   nav {
-    padding: 0 16px;
+    padding: 0 12px;
   }
 
-  /* Buttons container spacing */
+  /* BUTTON SIZE FIX */
   .nav-buttons {
     gap: 6px;
   }
 
-  /* Button size fix */
   .nav-cta {
-    padding: 8px 12px;
-    font-size: 12px;
+    padding: 6px 10px !important;
+    font-size: 11px !important;
     border-radius: 6px;
   }
 
-  /* Scroll text fix */
+  /* FORCE SCROLL CENTER */
   .hero-scroll-cue {
+    position: absolute;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
+    width: 100%;
   }
 
 }
@@ -847,25 +848,6 @@ footer { background:var(--g1); padding:64px 5% 36px; }
           <label>Time *</label>
           <select id="appt-time">
             <option value="">Select time</option>
-            <!-- Morning -->
-  <option>10:00 AM</option>
-  <option>10:30 AM</option>
-  <option>11:00 AM</option>
-  <option>11:30 AM</option>
-  <option>12:00 PM</option>
-  <option>12:30 PM</option>
-
-  <!-- Evening -->
-  <option>4:00 PM</option>
-  <option>4:30 PM</option>
-  <option>5:00 PM</option>
-  <option>5:30 PM</option>
-  <option>6:00 PM</option>
-  <option>6:30 PM</option>
-  <option>7:00 PM</option>
-  <option>7:30 PM</option>
-  <option>8:00 PM</option>
-  <option>8:30 PM</option>
           </select>
         </div>
       </div>
@@ -889,13 +871,15 @@ footer { background:var(--g1); padding:64px 5% 36px; }
         <textarea id="appt-msg" rows="3" placeholder="e.g. knee pain after running…"></textarea>
       </div>
 
-      <button class="btn-submit" onclick="submitAppointment()">Confirm Appointment</button>
+      <button id="appt-btn" class="btn-submit" onclick="submitAppointment()">
+  Confirm Appointment
+</button>
 
       <div class="success-msg" id="appt-success">
-        ✅ Thank you! We'll call you within 2 hours to confirm your slot.
+        ✅ Thank you! We'll contact you within 2 hours to confirm your slot.
       </div>
-      <button id="whatsapp-btn" style="display:none; margin-top:10px;">
-    Send WhatsApp Confirmation
+      <button id="whatsapp-btn" class="nav-cta secondary-btn" style="display:none; margin-top:10px;">
+  Send WhatsApp Confirmation
 </button>
     </div>
   </div>
@@ -943,9 +927,12 @@ footer { background:var(--g1); padding:64px 5% 36px; }
       <div class="form-group"><label>Why do you want to join us?</label><textarea id="apply-msg" rows="3" placeholder="Tell us about yourself…"></textarea></div>
       <div class="form-group">
   <label>Upload Resume (PDF) *</label>
-  <input type="file" id="apply-resume" accept=".pdf"/>
+  <input type="file" id="apply-resume" accept=".pdf">
+  <small style="color: #888;">Only PDF allowed (Max 2MB)</small>
 </div>
-      <button class="btn-submit" onclick="submitApplication()">Submit Application</button>
+      <button id="apply-btn" onclick="submitApplication()">
+  Apply Now
+</button>
       <div class="apply-success" id="apply-success">✅ Application received! We'll contact you within 3 working days.</div>
     </div>
   </div>
@@ -1069,6 +1056,11 @@ footer { background:var(--g1); padding:64px 5% 36px; }
 const API_URL = "https://clinic-backend-wg1k.onrender.com";
 
 function submitApplication() {
+
+  const btn = document.getElementById("apply-btn");
+  btn.innerText = "Submitting...";
+  btn.disabled = true;
+
   const name          = document.getElementById('apply-name').value.trim();
   const phone         = document.getElementById('apply-phone').value.trim();
   const email         = document.getElementById('apply-email').value.trim();
@@ -1078,12 +1070,17 @@ function submitApplication() {
   const message       = document.getElementById('apply-msg').value.trim();
   const resume        = document.getElementById('apply-resume').files[0];
 
+  // ❌ Validation fail
   if (!name || !phone || !email || !position || !resume) {
     alert('Please fill all required fields and upload resume');
+
+    btn.innerText = "Apply Now";
+    btn.disabled = false;
+
     return;
   }
 
-  // 🔥 FORM DATA (IMPORTANT)
+  // 🔥 FORM DATA
   const formData = new FormData();
   formData.append("name", name);
   formData.append("phone", phone);
@@ -1100,78 +1097,133 @@ function submitApplication() {
   })
   .then(res => res.json())
   .then(data => {
+
     alert(data.message);
     document.getElementById('apply-success').style.display = 'block';
 
-    ['apply-name','apply-phone','apply-email','apply-role','apply-exp','apply-qual','apply-msg','apply-resume']
+    // Clear form
+    ['apply-name','apply-phone','apply-email','apply-role','apply-exp','apply-qual','apply-msg']
       .forEach(id => document.getElementById(id).value = '');
+
+    // Clear file input properly
+    document.getElementById('apply-resume').value = null;
+
+    // ✅ Reset button after success
+    btn.innerText = "Apply Now";
+    btn.disabled = false;
+
   })
   .catch(err => {
     console.log(err);
     alert("Error submitting ❌");
+
+    // ✅ Reset button on error
+    btn.innerText = "Apply Now";
+    btn.disabled = false;
   });
 }
 
 function submitAppointment() {
+
+  const btn = document.getElementById("appt-btn");
+  btn.innerText = "Submitting...";
+  btn.disabled = true;
+
   const name    = document.getElementById('appt-name').value.trim();
   const phone   = document.getElementById('appt-phone').value.trim();
-  const email   = document.getElementById('appt-email').value.trim(); // ✅ FIXED
+  const email   = document.getElementById('appt-email').value.trim();
   const date    = document.getElementById('appt-date').value;
   const time    = document.getElementById('appt-time').value;
   const service = document.getElementById('appt-service').value;
   const message = document.getElementById('appt-msg').value.trim();
 
+  // ❌ Validation fail
   if (!name || !phone || !email || !date || !time) {
     alert('Please fill all required fields');
+
+    btn.innerText = "Confirm Appointment";
+    btn.disabled = false;
+
     return;
   }
 
   fetch(`${API_URL}/book`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      name,
-      phone,
-      email,   // ✅ FIXED
-      date,
-      time,
-      service,
-      message
-    })
+    body: JSON.stringify({ name, phone, email, date, time, service, message })
   })
-  .then(r => r.json()) // ✅ FIXED UX
+  .then(r => r.json())
   .then(d => {
-    alert(d.message); // ✅ FIXED UX
+
+    alert(d.message);
     document.getElementById('appt-success').style.display = 'block';
+
+    // WhatsApp button logic
     const whatsappBtn = document.getElementById("whatsapp-btn");
 
-// Create message
-const message = `Hi 👋 , I booked an appointment at Movement Clinic Salem
+    const msg = `Hi 👋, I booked an appointment at Movement Clinic Salem
 
 Name: ${name}
 Date: ${date}
 Time: ${time}
 Looking forward to my visit.`;
 
-// Encode message for URL
-const encodedMsg = encodeURIComponent(message);
+    const encodedMsg = encodeURIComponent(msg);
 
-// Show button
-whatsappBtn.style.display = "block";
+    whatsappBtn.style.display = "block";
+    whatsappBtn.onclick = () => {
+      window.open(`https://wa.me/918825955540?text=${encodedMsg}`, "_blank");
+    };
 
-// On click → open WhatsApp
-whatsappBtn.onclick = () => {
-  window.open(`https://wa.me/918825955540?text=${encodedMsg}`, "_blank");
-};
-
+    // Clear form
     ['appt-name','appt-phone','appt-email','appt-date','appt-time','appt-service','appt-msg']
       .forEach(id => document.getElementById(id).value = '');
+
+    // ✅ Reset button after success
+    btn.innerText = "Confirm Appointment";
+    btn.disabled = false;
+
   })
   .catch(e => {
     alert("Server error ❌");
     console.log(e);
+
+    // ✅ Reset button on error
+    btn.innerText = "Confirm Appointment";
+    btn.disabled = false;
   });
 }
+window.addEventListener("DOMContentLoaded", () => {
+
+  const dateInput = document.getElementById("appt-date");
+  const timeSelect = document.getElementById("appt-time");
+
+  dateInput.addEventListener("change", () => {
+    const selectedDate = new Date(dateInput.value);
+    const day = selectedDate.getDay();
+
+    let options = `<option value="">Select time</option>`;
+
+    if (day === 0) {
+      const sundayTimes = [
+        "10:00 AM","10:30 AM","11:00 AM","11:30 AM",
+        "12:00 PM","12:30 PM","1:00 PM","1:30 PM"
+      ];
+      sundayTimes.forEach(t => options += `<option>${t}</option>`);
+    } else {
+      const weekTimes = [
+        "10:00 AM","10:30 AM","11:00 AM","11:30 AM",
+        "12:00 PM","12:30 PM",
+        "4:00 PM","4:30 PM","5:00 PM","5:30 PM",
+        "6:00 PM","6:30 PM","7:00 PM","7:30 PM","8:00 PM"
+      ];
+      weekTimes.forEach(t => options += `<option>${t}</option>`);
+    }
+
+    timeSelect.innerHTML = options;
+  });
+
+});
 
 /* ── INTRO ──────────────────────────────────── */
 window.addEventListener('load', () => {
